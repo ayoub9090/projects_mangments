@@ -168,8 +168,13 @@ $(document).ready(function () {
 					$('#vim_name').html(data.first_name);
 					$('#vstatus').html(data.status);
 					$('#work_amount').val(data.work_amount);
-					$("input[name=status]").val(data.status);
-					$('#' + data.status).click();
+					if (data.status !== "pending") {
+						$("input[name=status]").val(data.status);
+						$('#' + data.status).click();
+					} else {
+						$('#approved').click();
+					}
+
 					$('#rejectReason').val(data.status_note);
 					$('#payment_amount').val(data.payment_amount);
 					$('#acc_note').val(data.accnotes);
@@ -211,16 +216,18 @@ $(document).ready(function () {
 	});
 
 	$('input[type=radio][name=status]').change(function () {
-		if (this.value == 'rejected') {
-			$('.amount-box').hide();
-			$('#work_amount').val('0');
-			$('.reason-box').fadeIn(200);
-		}
-		else if (this.value == 'approved') {
-			$('.reason-box').hide();
-			$('#rejectReason').val();
-			$('.amount-box').fadeIn(200);
-		}
+		setTimeout(function () {
+			if (this.value === 'rejected') {
+				//$('.amount-box').hide();
+				$('#work_amount').val("0");
+				//$('.reason-box').fadeIn(200);
+			}
+			else if (this.value === 'approved') {
+				//$('.reason-box').hide();
+				$('#rejectReason').val("");
+				//$('.amount-box').fadeIn(200);
+			}
+		}, 400)
 	});
 
 	$('.statUpdate').click(function () {

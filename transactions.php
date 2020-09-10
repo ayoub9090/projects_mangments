@@ -212,12 +212,12 @@ include('inc/header.php');
 						</div>
 
 						<div class="form-group amount-box">
-								<label for="name" class="control-label">Insert Work Amount:</label>
+								<label for="name" class="control-label">Insert Work Amount: <small class="color-danger">required if approved</small></label>
 								<input class="form-control" type="number" id="work_amount" value="0" name="work_amount" />
 						</div>	
 
 						<div class="form-group reason-box">
-								<label for="name" class="control-label">Reason of Rejection:</label>
+								<label for="name" class="control-label">Reason of Rejection: <small class="color-danger">required if reject</small></label>
 								<textarea class="form-control" id="rejectReason" name="status_note"></textarea>	
 						</div>	
 					

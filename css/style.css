@@ -103,5 +103,9 @@
 }
 
 .reason-box {
-    display: none;
+    /*display: none;*/
+}
+
+.color-danger {
+    color: red;
 }

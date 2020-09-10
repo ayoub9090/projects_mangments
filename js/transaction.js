@@ -16,6 +16,21 @@ $(document).ready(function () {
 		}];
 	}
 
+	if (role === "Admin") {
+		options = [{
+			"targets": [13],
+			"visible": false
+		}, {
+			"targets": [0, 12, 14],
+			"orderable": false
+		}];
+	}
+
+	if (role === "subContractor") {
+
+	}
+
+
 	var transactionRecords = $('#transactionListing').DataTable({
 		"lengthChange": false,
 		"processing": true,

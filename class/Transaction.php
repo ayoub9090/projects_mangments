@@ -123,11 +123,13 @@ class Transaction {
 			$sqlQuery = "SELECT trans.id,trans.site_name,trans.site_id,
 			trans.date_of_installation,
 			trans.sub_con_name,trans.notes, trans.status,trans.status_note,trans.work_amount,
+			acc.payment_amount,acc.notes as accnotes,acc.id as accID,
 			t.id as task_id,t.task_description,p.id as project_id,
 			p.project_name,u.id as im_id,u.first_name FROM ".$this->transactionTable." trans 
 			LEFT JOIN ". $this->projectTable ." p ON p.id = trans.project_id 
 			LEFT JOIN ". $this->taskTabel ." t ON t.id = trans.task_id
 			LEFT JOIN ". $this->userTable ." u ON u.id = trans.im_id
+			LEFT JOIN ". $this->accountTable ." acc ON acc.transaction_id = trans.id
 			WHERE trans.id = ?";		
 			$stmt = $this->conn->prepare($sqlQuery);
 			$stmt->bind_param("i", $this->id);	
@@ -255,23 +257,45 @@ class Transaction {
 	public function insertPaymentAmount(){
 		
 		if($this->id) {			
-			
-			$stmt = $this->conn->prepare("
-			INSERT INTO ".$this->accountTable." (`payment_amount`, `the_current_date`,`notes`,`user_id`,`transaction_id`)
-			VALUES (?, NOW(),?,?,?)
-			");
+			if($this->acc_id > 0){
+				$stmt = $this->conn->prepare("
+				UPDATE ".$this->accountTable." 
+				SET payment_amount= ?,notes= ? 
+				WHERE id = ?");
+				
 
-			$this->id = htmlspecialchars(strip_tags($this->id));
-			$this->user_id = strip_tags($this->user_id);
-			$this->payment_amount = htmlspecialchars(strip_tags($this->payment_amount));
-			$this->notes = htmlspecialchars(strip_tags($this->notes));
-	
-			$stmt->bind_param("ssss", $this->payment_amount ,$this->notes,$this->user_id,$this->id);
-		
-			if($stmt->execute()){
-				echo true;
-			}
+				$this->id = htmlspecialchars(strip_tags($this->id));
+				$this->user_id = strip_tags($this->user_id);
+				$this->payment_amount = htmlspecialchars(strip_tags($this->payment_amount));
+				$this->notes = htmlspecialchars(strip_tags($this->notes));
+				$this->acc_id = htmlspecialchars(strip_tags($this->acc_id));
+
+
+				$stmt->bind_param("ssi", $this->payment_amount ,$this->notes,$this->acc_id);
 			
+				if($stmt->execute()){
+					echo true;
+				}
+		}else{
+	
+				$stmt = $this->conn->prepare("
+				INSERT INTO ".$this->accountTable." (`payment_amount`, `the_current_date`,`notes`,`user_id`,`transaction_id`)
+				VALUES (?, NOW(),?,?,?)
+				");
+
+				$this->id = htmlspecialchars(strip_tags($this->id));
+				$this->user_id = strip_tags($this->user_id);
+				$this->payment_amount = htmlspecialchars(strip_tags($this->payment_amount));
+				$this->notes = htmlspecialchars(strip_tags($this->notes));
+				$this->acc_id = htmlspecialchars(strip_tags($this->acc_id));
+
+
+				$stmt->bind_param("ssss", $this->payment_amount ,$this->notes,$this->user_id,$this->id);
+			
+				if($stmt->execute()){
+					echo true;
+				}
+			}
 		}	
 	}
 

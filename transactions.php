@@ -230,6 +230,8 @@ include('inc/header.php');
 
 
 					<form method="post" id="accountable_area" style="<?php if($_SESSION["role"] !== 'Accountable'){ echo 'display:none'; } ?>">
+						
+					    <input id="acc_ID" type="hidden" name="acc_ID" value="0"  />
 						<div class="form-group ">
 								<label for="name" class="control-label">Insert Payment Amount:</label>
 								<input class="form-control" type="number" id="payment_amount" value="0" name="payment_amount" />

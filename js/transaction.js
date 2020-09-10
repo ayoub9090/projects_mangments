@@ -1,5 +1,21 @@
 $(document).ready(function () {
 	var the_task;
+
+	var options = [{
+		"targets": [0, 12, 13, 14],
+		"orderable": false,
+	}];
+
+	if (role === "Accountable") {
+		options = [{
+			"targets": [13, 14],
+			"visible": false
+		}, {
+			"targets": [0, 12],
+			"orderable": false
+		}];
+	}
+
 	var transactionRecords = $('#transactionListing').DataTable({
 		"lengthChange": false,
 		"processing": true,
@@ -21,12 +37,9 @@ $(document).ready(function () {
 			data: { action: 'listTransaction' },
 			dataType: "json"
 		},
-		"columnDefs": [
-			{
-				"targets": [0, 12, 13, 14],
-				"orderable": false,
-			},
-		],
+		"columnDefs":
+			options
+		,
 		"pageLength": 10
 	});
 
@@ -143,6 +156,9 @@ $(document).ready(function () {
 					$("input[name=status]").val(data.status);
 					$('#' + data.status).click();
 					$('#rejectReason').val(data.status_note);
+					$('#payment_amount').val(data.payment_amount);
+					$('#acc_note').val(data.accnotes);
+					$('#acc_ID').val(data.accID);
 				}).modal();
 			}
 		});
@@ -231,6 +247,7 @@ $(document).ready(function () {
 		var acc_note = $('#acc_note').val();
 		var payment_amount = $('#payment_amount').val();
 		var action = 'insertPaymentAmount';
+		var acc_ID = $('#acc_ID').val();
 
 		if (payment_amount <= 0) {
 			alert('please insert payment amount');
@@ -240,7 +257,7 @@ $(document).ready(function () {
 		$.ajax({
 			url: 'transaction_action.php',
 			method: "POST",
-			data: { id: id, acc_note, payment_amount, action: action },
+			data: { id: id, acc_note, acc_ID, payment_amount, action: action },
 			dataType: "json",
 			success: function (data) {
 				$('#transactionDetails').modal("toggle");

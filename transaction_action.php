@@ -73,6 +73,8 @@ if(!empty($_POST['action']) && $_POST['action'] == 'insertPaymentAmount') {
 	$transaction->user_id = $_SESSION["userid"];
 	$transaction->payment_amount = $_POST["payment_amount"];
 	$transaction->notes = $_POST["acc_note"];
+	$transaction->acc_id = $_POST["acc_ID"];
+	
 	
 
 	$transaction->insertPaymentAmount();

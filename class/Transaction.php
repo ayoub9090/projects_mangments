@@ -21,7 +21,7 @@ class Transaction {
 		trans.date_of_installation,trans.status,trans.status_note,trans.work_amount,
 		trans.created_by_id,trans.sub_con_name,trans.notes,acc.payment_amount,acc.notes as accnotes,
 		t.id as task_id,t.task_description,p.id as project_id,
-		p.project_name,u.first_name FROM ".$this->transactionTable." trans
+		p.project_name,u.first_name, u.last_name FROM ".$this->transactionTable." trans
 		LEFT JOIN ". $this->projectTable ." p ON p.id = trans.project_id 
 		LEFT JOIN ". $this->taskTabel ." t ON t.id = trans.task_id
 		LEFT JOIN ". $this->userTable ." u ON u.id = trans.im_id
@@ -30,6 +30,10 @@ class Transaction {
 
 		if($this->user_role == "SubContractor" && empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(trans.created_by_id = "'. $this->user_id .'") ';	
+		}
+
+		if($this->user_role == "Admin" && empty($_POST["search"]["value"])){
+			$sqlQuery .= 'where(trans.im_id = "'. $this->user_id .'") ';	
 		}
 
 		if(!empty($_POST["search"]["value"])){
@@ -44,6 +48,9 @@ class Transaction {
 			$sqlQuery .= ' OR trans.date_of_installation LIKE "%'.$_POST["search"]["value"].'%") ';
 			if($this->user_role == "SubContractor"){
 				$sqlQuery .= 'AND (trans.created_by_id = "'. $this->user_id .'") ';	
+			}
+			if($this->user_role == "Admin"){
+				$sqlQuery .= 'AND (trans.im_id = "'. $this->user_id .'") ';	
 			}						
 		}
 		
@@ -78,7 +85,7 @@ class Transaction {
 			$rows[] = ucfirst($transaction['date_of_installation']);
 			$rows[] = ucfirst($transaction['project_name']);
 			$rows[] = ucfirst($transaction['task_description']);
-			$rows[] = ucfirst($transaction['first_name']);		
+			$rows[] = ucfirst($transaction['first_name'].' '.$transaction['last_name']);		
 			$rows[] = ucfirst($transaction['notes']);
 			$rows[] = ucfirst($transaction['status']);
 			$rows[] = ucfirst($transaction['work_amount']);

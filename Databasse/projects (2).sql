@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 10, 2020 at 02:03 PM
+-- Generation Time: Sep 11, 2020 at 10:56 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -36,16 +36,16 @@ CREATE TABLE IF NOT EXISTS `pm_accounts` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `notes` varchar(250) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `transaction_id` int(11) NOT NULL,
+  `transaction_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pm_accounts`
 --
 
 INSERT INTO `pm_accounts` (`id`, `payment_amount`, `the_current_date`, `created_date`, `notes`, `user_id`, `transaction_id`) VALUES
-(1, 12, '2020-09-10 13:37:49', '2020-09-10 13:37:49', 'this is notes', 14, 6);
+(1, 58, '2020-09-10 13:37:49', '2020-09-10 13:37:49', 'this is notes ll', 14, 6);
 
 -- --------------------------------------------------------
 
@@ -118,21 +118,22 @@ CREATE TABLE IF NOT EXISTS `pm_transaction` (
   `project_id` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
   `im_id` int(11) NOT NULL,
-  `work_amount` int(250) NOT NULL,
+  `work_amount` int(250) NOT NULL DEFAULT '0',
   `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
-  `status_note` varchar(255) NOT NULL,
+  `status_note` varchar(255) DEFAULT NULL,
+  `created_by_id` int(11) NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pm_transaction`
 --
 
-INSERT INTO `pm_transaction` (`id`, `site_name`, `site_id`, `sub_con_name`, `notes`, `date_of_installation`, `project_id`, `task_id`, `im_id`, `work_amount`, `status`, `status_note`, `date_created`) VALUES
-(5, 'site sample', 22, 'teh subcntractor', 'this is a note', '2020-09-01 21:00:00', 10, 15, 7, 0, 'pending', '', '2020-09-07 18:08:46'),
-(6, 'site sample edit', 22, 'teh subcntractor', 'this is a note', '2020-09-07 21:00:00', 10, 16, 7, 77, 'approved', '', '2020-09-08 09:06:44'),
-(7, 'Zarqa_princeHamzehAvenue', 33, 'yassien', 'this is a note', '2020-09-07 21:00:00', 11, 19, 7, 0, 'rejected', 'yyyyyyyy note', '2020-09-08 15:46:23');
+INSERT INTO `pm_transaction` (`id`, `site_name`, `site_id`, `sub_con_name`, `notes`, `date_of_installation`, `project_id`, `task_id`, `im_id`, `work_amount`, `status`, `status_note`, `created_by_id`, `date_created`) VALUES
+(5, 'site sample', 22, 'teh subcntractor', 'this is a note', '2020-09-01 21:00:00', 10, 15, 7, 0, 'pending', '', 0, '2020-09-07 18:08:46'),
+(6, 'site sample edit', 22, 'teh subcntractor', 'this is a note', '2020-09-07 21:00:00', 10, 16, 7, 77, 'approved', '', 0, '2020-09-08 09:06:44'),
+(7, 'Zarqa_princeHamzehAvenue', 33, 'yassien', 'this is a note', '2020-09-07 21:00:00', 11, 19, 7, 44, 'approved', '', 0, '2020-09-08 15:46:23');
 
 -- --------------------------------------------------------
 

@@ -8,6 +8,8 @@ $db = $database->getConnection();
 $transaction = new Transaction($db);
 
 if(!empty($_POST['action']) && $_POST['action'] == 'listTransaction') {
+	$transaction->user_role = $_SESSION["role"];
+	$transaction->user_id = $_SESSION["userid"];
 	$transaction->listTransaction();
 }
 
@@ -21,8 +23,8 @@ if(!empty($_POST['action']) && $_POST['action'] == 'addTransaction') {
 	$transaction->im_id = $_POST["im_id"];
 	$transaction->date_of_intall = $_POST["date_of_intall"];
 	$transaction->note = $_POST["note"];
+	$transaction->created_user_id = $_SESSION["userid"];
 	
-
 	$transaction->insert();
 }
 

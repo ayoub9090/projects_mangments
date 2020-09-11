@@ -87,7 +87,11 @@ include('inc/header.php');
 						</div>
 						<div class="form-group"
 							<label for="transaction" class="control-label">Sub-Con Name</label>
-							<input type="text" class="form-control" id="sub_con_name" name="sub_con_name" placeholder="Sub-Con Name" required>			
+							<?php if($_SESSION["role"] == 'SubContractor'){ ?>
+								<input type="text" value="<?php echo $_SESSION["name"]; ?>" class="form-control" id="sub_con_name" name="sub_con_name" placeholder="Sub-Con Name" readonly required>			
+							<?php }else{ ?>
+								<input type="text" class="form-control" id="sub_con_name" name="sub_con_name" placeholder="Sub-Con Name" required>			
+							<?php } ?>
 						</div>
 
 						<div class="form-group"

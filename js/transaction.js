@@ -26,8 +26,14 @@ $(document).ready(function () {
 		}];
 	}
 
-	if (role === "subContractor") {
-
+	if (role === "SubContractor") {
+		options = [{
+			"targets": [13, 14],
+			"visible": false
+		}, {
+			"targets": [0, 12, 14],
+			"orderable": false
+		}];
 	}
 
 

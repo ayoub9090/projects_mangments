@@ -14,6 +14,13 @@ $project = new Project($db);
 if(!$user->loggedIn()) {
 	header("Location: index.php");
 }
+
+if($user->loggedIn()){
+	if($_SESSION["role"] == "SubContractor" || $_SESSION["role"] == "Accountable"){
+		header("Location: transactions.php");
+	}
+}
+
 include('inc/header.php');
 ?>
 <title></title>

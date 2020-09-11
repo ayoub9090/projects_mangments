@@ -14,10 +14,12 @@ class Transaction {
     }	    
 	
 	public function listTransaction(){
-		
+		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
+		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
+
 		$sqlQuery = "SELECT trans.id,trans.site_name,trans.site_id,
 		trans.date_of_installation,trans.status,trans.status_note,trans.work_amount,
-		trans.sub_con_name,trans.notes,acc.payment_amount,acc.notes as accnotes,
+		trans.created_by_id,trans.sub_con_name,trans.notes,acc.payment_amount,acc.notes as accnotes,
 		t.id as task_id,t.task_description,p.id as project_id,
 		p.project_name,u.first_name FROM ".$this->transactionTable." trans
 		LEFT JOIN ". $this->projectTable ." p ON p.id = trans.project_id 
@@ -25,6 +27,11 @@ class Transaction {
 		LEFT JOIN ". $this->userTable ." u ON u.id = trans.im_id
 		LEFT JOIN ". $this->accountTable ." acc ON acc.transaction_id = trans.id
 		";
+
+		if($this->user_role == "SubContractor" && empty($_POST["search"]["value"])){
+			$sqlQuery .= 'where(trans.created_by_id = "'. $this->user_id .'") ';	
+		}
+
 		if(!empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(trans.id LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR trans.site_name LIKE "%'.$_POST["search"]["value"].'%" ';
@@ -34,7 +41,10 @@ class Transaction {
 			$sqlQuery .= ' OR u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR trans.status LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR trans.work_amount LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR trans.date_of_installation LIKE "%'.$_POST["search"]["value"].'%") ';						
+			$sqlQuery .= ' OR trans.date_of_installation LIKE "%'.$_POST["search"]["value"].'%") ';
+			if($this->user_role == "SubContractor"){
+				$sqlQuery .= 'AND (trans.created_by_id = "'. $this->user_id .'") ';	
+			}						
 		}
 		
 		if(!empty($_POST["order"])){
@@ -95,9 +105,9 @@ class Transaction {
 		if($this->site_name) {
 
 			$stmt = $this->conn->prepare("
-			INSERT INTO ".$this->transactionTable."(`site_name`, `site_id`, `sub_con_name`, `notes`, `date_of_installation`, `project_id`, `task_id`, `im_id`)
-			VALUES(?,?,?,?,?,?,?,?)");
-			
+			INSERT INTO ".$this->transactionTable."(`site_name`, `site_id`, `sub_con_name`, `notes`, `date_of_installation`, `project_id`, `task_id`, `im_id`,`created_by_id`)
+			VALUES(?,?,?,?,?,?,?,?,?)");
+			$this->created_user_id = htmlspecialchars(strip_tags($this->created_user_id));	
 			$this->site_name = htmlspecialchars(strip_tags($this->site_name));
 			$this->site_id = htmlspecialchars(strip_tags($this->site_id));
 			$this->sub_con_name = htmlspecialchars(strip_tags($this->sub_con_name));
@@ -107,7 +117,7 @@ class Transaction {
 			$this->date_of_intall =  $this->date_of_intall;
 			$this->note = htmlspecialchars(strip_tags($this->note));
 
-			$stmt->bind_param("ssssssss",  $this->site_name,$this->site_id ,$this->sub_con_name,$this->note,$this->date_of_intall,$this->project_id,$this->task_id,$this->im_id);
+			$stmt->bind_param("sssssssss",  $this->site_name,$this->site_id ,$this->sub_con_name,$this->note,$this->date_of_intall,$this->project_id,$this->task_id,$this->im_id,$this->created_user_id);
 		
 	
 			if($stmt->execute()){

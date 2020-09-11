@@ -199,7 +199,7 @@ include('inc/header.php');
 
 					<input type="hidden" name="transID" id="transID" value="" />
 
-					<form method="post" onsubmit="return submitStatus()" id="transactionApproveForm" style="<?php if($_SESSION["role"] !== 'Admin'){ echo 'display:none'; } ?>" >
+					<form method="post" onsubmit="return submitStatus()" id="transactionApproveForm" style="<?php if($_SESSION["role"] !== 'Admin' && $_SESSION["role"] !== 'superAdmin'){ echo 'display:none'; } ?>" >
 						<div class="btn-group">	
 							<div class="inputGroup">
 								<input id="approved" name="status"  value="approved" checked type="radio"/>

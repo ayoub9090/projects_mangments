@@ -167,9 +167,8 @@ $(document).ready(function () {
 					$('#vtask_name').html(data.task_description);
 					$('#vim_name').html(data.first_name);
 					$('#vstatus').html(data.status);
-					$('#work_amount').val(data.work_amount);
+
 					if (data.status !== "pending") {
-						$("input[name=status]").val(data.status);
 						$('#' + data.status).click();
 					} else {
 						$('#approved').click();
@@ -216,18 +215,18 @@ $(document).ready(function () {
 	});
 
 	$('input[type=radio][name=status]').change(function () {
-		setTimeout(function () {
-			if (this.value === 'rejected') {
-				//$('.amount-box').hide();
-				$('#work_amount').val("0");
-				//$('.reason-box').fadeIn(200);
-			}
-			else if (this.value === 'approved') {
-				//$('.reason-box').hide();
-				$('#rejectReason').val("");
-				//$('.amount-box').fadeIn(200);
-			}
-		}, 400)
+		if (this.value === 'rejected') {
+
+			//$('.amount-box').hide();
+			$('#work_amount').val("0");
+			//$('.reason-box').fadeIn(200);
+		}
+		else if (this.value === 'approved') {
+			//$('.reason-box').hide();
+			$('#rejectReason').val("");
+			//$('.amount-box').fadeIn(200);
+		}
+
 	});
 
 	$('.statUpdate').click(function () {

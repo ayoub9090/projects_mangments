@@ -10,7 +10,7 @@ $user = new User($db);
 if($user->loggedIn()) {
 	if($_SESSION["role"] == 'Admin') {
 		header("Location: users.php");
-	} else if($_SESSION["role"] == 'Accountable') {
+	} else if($_SESSION["role"] == 'Accountable' || $_SESSION["role"] == 'SubContractor') {
 		header("Location: transactions.php");
 	}
 }

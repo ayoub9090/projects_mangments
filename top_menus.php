@@ -9,7 +9,7 @@
 		<li id="transactions"><a href="transactions.php">Transactions</a></li> 
 	<?php } ?>
 
-	<?php if($_SESSION["role"] == 'Accountable') { ?>
+	<?php if($_SESSION["role"] == 'Accountable' || $_SESSION["role"] == "SubContractor") { ?>
 		
 		<li id="transactions"><a href="transactions.php">Transactions</a></li> 
 	<?php } ?>

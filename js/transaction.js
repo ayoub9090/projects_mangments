@@ -43,6 +43,10 @@ $(document).ready(function () {
 		"serverSide": true,
 		"bFilter": true,
 		dom: 'Bfrtip',
+		searchPanes: {
+			cascadePanes: true,
+			viewTotal: true,
+		},
 		buttons: [
 			'copyHtml5',
 			'excelHtml5',

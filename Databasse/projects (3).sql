@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 11, 2020 at 10:56 PM
+-- Generation Time: Sep 12, 2020 at 04:53 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -38,14 +38,15 @@ CREATE TABLE IF NOT EXISTS `pm_accounts` (
   `user_id` int(11) NOT NULL,
   `transaction_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pm_accounts`
 --
 
 INSERT INTO `pm_accounts` (`id`, `payment_amount`, `the_current_date`, `created_date`, `notes`, `user_id`, `transaction_id`) VALUES
-(1, 58, '2020-09-10 13:37:49', '2020-09-10 13:37:49', 'this is notes ll', 14, 6);
+(1, 58, '2020-09-10 13:37:49', '2020-09-10 13:37:49', 'this is notes ll', 14, 6),
+(5, 10, '2020-09-12 16:53:12', '2020-09-12 16:53:12', '', 14, 7);
 
 -- --------------------------------------------------------
 
@@ -60,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `pm_projects` (
   `user_id` int(11) NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pm_projects`
@@ -71,7 +72,8 @@ INSERT INTO `pm_projects` (`id`, `project_name`, `user_id`, `date_created`) VALU
 (10, 'my first project22', 4, '2020-09-06 18:02:19'),
 (11, 'zarqa', 4, '2020-09-08 15:37:57'),
 (12, 'amman', 4, '2020-09-08 15:38:18'),
-(13, 'project created by admin ', 7, '2020-09-09 16:37:28');
+(13, 'project created by admin ', 7, '2020-09-09 16:37:28'),
+(14, 'irbid2', 7, '2020-09-12 15:51:53');
 
 -- --------------------------------------------------------
 
@@ -86,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `pm_tasks` (
   `project_id` int(11) UNSIGNED NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pm_tasks`
@@ -99,7 +101,8 @@ INSERT INTO `pm_tasks` (`id`, `task_description`, `project_id`, `date_created`) 
 (16, 'first task', 10, '2020-09-07 12:09:20'),
 (17, 'task 22', 10, '2020-09-08 09:06:07'),
 (18, 'antena', 11, '2020-09-08 15:39:34'),
-(19, 'antena2', 11, '2020-09-08 15:39:48');
+(19, 'antena2', 11, '2020-09-08 15:39:48'),
+(20, 'irbid task', 14, '2020-09-12 16:10:01');
 
 -- --------------------------------------------------------
 
@@ -124,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `pm_transaction` (
   `created_by_id` int(11) NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pm_transaction`
@@ -133,7 +136,9 @@ CREATE TABLE IF NOT EXISTS `pm_transaction` (
 INSERT INTO `pm_transaction` (`id`, `site_name`, `site_id`, `sub_con_name`, `notes`, `date_of_installation`, `project_id`, `task_id`, `im_id`, `work_amount`, `status`, `status_note`, `created_by_id`, `date_created`) VALUES
 (5, 'site sample', 22, 'teh subcntractor', 'this is a note', '2020-09-01 21:00:00', 10, 15, 7, 0, 'pending', '', 0, '2020-09-07 18:08:46'),
 (6, 'site sample edit', 22, 'teh subcntractor', 'this is a note', '2020-09-07 21:00:00', 10, 16, 7, 77, 'approved', '', 0, '2020-09-08 09:06:44'),
-(7, 'Zarqa_princeHamzehAvenue', 33, 'yassien', 'this is a note', '2020-09-07 21:00:00', 11, 19, 7, 44, 'approved', '', 0, '2020-09-08 15:46:23');
+(7, 'Zarqa_princeHamzehAvenue', 33, 'yassien', 'this is a note', '2020-09-07 21:00:00', 11, 19, 7, 44, 'approved', '', 0, '2020-09-08 15:46:23'),
+(9, 'Jordan vally', 22, 'sub contractor 2 last', '', '2020-09-01 21:00:00', 11, 19, 7, 0, 'pending', NULL, 12, '2020-09-11 22:56:48'),
+(10, 'Jordan vally3', 34, 'sub contractor 2 last', '', '2020-09-07 11:54:17', 11, 18, 7, 0, 'pending', NULL, 12, '2020-09-11 22:58:28');
 
 -- --------------------------------------------------------
 

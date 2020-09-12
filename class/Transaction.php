@@ -36,6 +36,10 @@ class Transaction {
 			$sqlQuery .= 'where(trans.im_id = "'. $this->user_id .'") ';	
 		}
 
+		if($this->user_role == "Accountable" && empty($_POST["search"]["value"])){
+			$sqlQuery .= 'where(trans.status = "Approved") ';	
+		}
+
 		if(!empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(trans.id LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR trans.site_name LIKE "%'.$_POST["search"]["value"].'%" ';
@@ -51,7 +55,12 @@ class Transaction {
 			}
 			if($this->user_role == "Admin"){
 				$sqlQuery .= 'AND (trans.im_id = "'. $this->user_id .'") ';	
-			}						
+			}
+
+			if($this->user_role == "Accountable"){
+				$sqlQuery .= 'AND (trans.status = "Approved") ';	
+			}
+
 		}
 		
 		if(!empty($_POST["order"])){

@@ -41,6 +41,11 @@ class Transaction {
 
 		if($this->user_role == "Accountable" && empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(trans.status = "Approved") ';	
+			if($this->sub_con_id){
+				$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
+				$sqlQuery .= 'AND (trans.sub_con_name = '.$this->sub_con_id.') ';
+			}
+
 		}
 
 		if(!empty($_POST["search"]["value"])){
@@ -62,6 +67,11 @@ class Transaction {
 
 			if($this->user_role == "Accountable"){
 				$sqlQuery .= 'AND (trans.status = "Approved") ';	
+
+				if($this->sub_con_id && $this->sub_con_id > 0){
+					$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
+					$sqlQuery .= 'AND (trans.sub_con_name = '.$this->sub_con_id.') ';
+				}
 			}
 
 		}

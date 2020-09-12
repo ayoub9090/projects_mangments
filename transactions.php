@@ -46,12 +46,15 @@ include('inc/header.php');
 							$result3 = $transaction->subContractorList();
 							while ($subCon = $result3->fetch_assoc()) { 	
 							?>
+							<?php if(isset($_GET["sub_con"]) && $subCon['id'] == $_GET["sub_con"]){ ?>
+								<option selected value="<?php echo $subCon['id']; ?>"><?php echo ucfirst($subCon['first_name']).' '.ucfirst($subCon['last_name']) ;?></option>							
+							<?php }else{ ?>
 								<option value="<?php echo $subCon['id']; ?>"><?php echo ucfirst($subCon['first_name']).' '.ucfirst($subCon['last_name']) ;?></option>							
-							<?php } ?>
+							<?php } } ?>
 							</select>
 						</div>
 							</div>
-						<div class="col-sm-3"><input type="submit" class="btn btn-primary btn-block" value="View" /></div>
+						<div class="col-sm-3"><input type="submit"  class="btn select-main_sub_con_name btn-primary btn-block" value="View" /></div>
 						
 							</form>
 							</div>

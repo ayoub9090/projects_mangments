@@ -1,5 +1,7 @@
+
 $(document).ready(function () {
 	var the_task;
+
 
 	var options = [{
 		"targets": [0, 12, 13, 14],
@@ -35,8 +37,14 @@ $(document).ready(function () {
 			"orderable": false
 		}];
 	}
-
-
+	var mainSubContractor = "";
+	var urlString = location.href;
+	urlParams = parseURLParams(urlString);
+	if (typeof (urlParams) !== "undefined") {
+		if (urlParams["sub_con"].length > 0) {
+			mainSubContractor = urlParams["sub_con"][0];
+		}
+	}
 	var transactionRecords = $('#transactionListing').DataTable({
 		"lengthChange": false,
 		"processing": true,
@@ -59,7 +67,7 @@ $(document).ready(function () {
 		"ajax": {
 			url: "transaction_action.php",
 			type: "POST",
-			data: { action: 'listTransaction' },
+			data: { action: 'listTransaction', mainSubContractor: mainSubContractor },
 			dataType: "json"
 		},
 		"columnDefs":
@@ -178,6 +186,8 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+
 
 	$("#transactionModal").on('submit', '#transactionForm', function (event) {
 		event.preventDefault();
@@ -367,3 +377,22 @@ $(document).ready(function () {
 
 
 
+function parseURLParams(url) {
+	var queryStart = url.indexOf("?") + 1,
+		queryEnd = url.indexOf("#") + 1 || url.length + 1,
+		query = url.slice(queryStart, queryEnd - 1),
+		pairs = query.replace(/\+/g, " ").split("&"),
+		parms = {}, i, n, v, nv;
+
+	if (query === url || query === "") return;
+
+	for (i = 0; i < pairs.length; i++) {
+		nv = pairs[i].split("=", 2);
+		n = decodeURIComponent(nv[0]);
+		v = decodeURIComponent(nv[1]);
+
+		if (!parms.hasOwnProperty(n)) parms[n] = [];
+		parms[n].push(nv.length === 2 ? v : null);
+	}
+	return parms;
+}

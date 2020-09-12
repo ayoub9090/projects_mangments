@@ -10,6 +10,9 @@ $transaction = new Transaction($db);
 if(!empty($_POST['action']) && $_POST['action'] == 'listTransaction') {
 	$transaction->user_role = $_SESSION["role"];
 	$transaction->user_id = $_SESSION["userid"];
+	
+	$transaction->sub_con_id = $_POST["mainSubContractor"];
+	
 	$transaction->listTransaction();
 }
 

@@ -48,10 +48,10 @@ $(document).ready(function () {
 			viewTotal: true,
 		},
 		buttons: [
-			'copyHtml5',
-			'excelHtml5',
-			'csvHtml5',
-			'pdfHtml5'
+			{ extend: 'copyHtml5', footer: true },
+			{ extend: 'excelHtml5', footer: true },
+			{ extend: 'csvHtml5', footer: true },
+			{ extend: 'pdfHtml5', footer: true }
 		],
 		'serverMethod': 'post',
 		"order": [],
@@ -65,7 +65,65 @@ $(document).ready(function () {
 		"columnDefs":
 			options
 		,
-		"pageLength": 10
+		"pageLength": 10,
+		"footerCallback": function (row, data, start, end, display) {
+			var api = this.api(), data;
+			console.log(data)
+			// Remove the formatting to get integer data for summation
+			var intVal = function (i) {
+				return typeof i === 'string' ?
+					i.replace(/[\$,]/g, '') * 1 :
+					typeof i === 'number' ?
+						i : 0;
+			};
+
+			// Total over all pages
+			total = api
+				.column(10)
+				.data()
+				.reduce(function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+			// Total over this page
+			pageTotal = api
+				.column(10, { page: 'current' })
+				.data()
+				.reduce(function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+			// Update footer
+			$(api.column(10).footer()).html(
+				'' + pageTotal + '<br>\n ( ' + total + ' total)'
+			);
+
+			// Total over all pages
+			total1 = api
+				.column(11)
+				.data()
+				.reduce(function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+			// Total over this page
+			pageTotal1 = api
+				.column(11, { page: 'current' })
+				.data()
+				.reduce(function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+			// Update footer
+			$(api.column(11).footer()).html(
+				'' + pageTotal1 + '<br>\n ( ' + total1 + ' total)' + '<br>\n<br>\n'
+			);
+
+			var balance = total - total1;
+			var pageBalance = pageTotal - pageTotal1;
+			$('.balance').text('Balance: ' + balance + ' (' + pageBalance + ')');
+
+		}
 	});
 
 	$('#addTransaction').click(function () {

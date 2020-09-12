@@ -68,6 +68,34 @@ include('inc/header.php');
 					<th></th>						
 				</tr>
 			</thead>
+
+			<?php if($_SESSION["role"] == 'Accountable'){ ?>
+			<tfoot>
+            <tr>
+					<th></th>	
+					<th></th>	
+					<th></th>
+					<th></th>	
+					<th></th>	
+					<th></th>
+					<th></th>	
+					<th></th>	
+					<th></th>
+					<th></th>	
+					<th  style="text-align:right">Total:</th>
+					<th style="text-align:right">Total:</th>
+					<th></th>
+					<th></th>
+					<th></th>	
+				
+                
+			</tr>
+			<tr>
+				<th colspan="15" class="balance" style="text-align:right">Balance:</th>
+				
+            </tr>
+		</tfoot>
+			<?php } ?>
 		</table>
 	</div>
 	

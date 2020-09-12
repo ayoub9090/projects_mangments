@@ -105,3 +105,9 @@
 .color-danger {
     color: red;
 }
+
+.form-group--select {
+    margin-top: 20px;
+    width: 40%;
+    float: right;
+}

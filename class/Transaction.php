@@ -21,12 +21,15 @@ class Transaction {
 		trans.date_of_installation,trans.status,trans.status_note,trans.work_amount,
 		trans.created_by_id,trans.sub_con_name,trans.notes,acc.payment_amount,acc.notes as accnotes,
 		t.id as task_id,t.task_description,p.id as project_id,
-		p.project_name,u.first_name, u.last_name FROM ".$this->transactionTable." trans
+		p.project_name,u.first_name, u.last_name,sc.first_name as scfirst_name,sc.last_name as sclast_name, sc.id as scid FROM ".$this->transactionTable." trans
 		LEFT JOIN ". $this->projectTable ." p ON p.id = trans.project_id 
 		LEFT JOIN ". $this->taskTabel ." t ON t.id = trans.task_id
 		LEFT JOIN ". $this->userTable ." u ON u.id = trans.im_id
+		LEFT JOIN ". $this->userTable ." sc ON sc.id = trans.sub_con_name
 		LEFT JOIN ". $this->accountTable ." acc ON acc.transaction_id = trans.id
 		";
+
+
 
 		if($this->user_role == "SubContractor" && empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(trans.created_by_id = "'. $this->user_id .'") ';	
@@ -92,7 +95,7 @@ class Transaction {
 			$rows[] = $transaction['id'];
 			$rows[] = ucfirst($transaction['site_name']);
 			$rows[] = ucfirst($transaction['site_id']);
-			$rows[] = ucfirst($transaction['sub_con_name']);
+			$rows[] = ucfirst($transaction['scfirst_name']).' '.ucfirst($transaction['sclast_name']);
 			
 			$rows[] = ucfirst($transaction['date_of_installation']);
 			$rows[] = ucfirst($transaction['project_name']);
@@ -154,10 +157,12 @@ class Transaction {
 			trans.sub_con_name,trans.notes, trans.status,trans.status_note,trans.work_amount,
 			acc.payment_amount,acc.notes as accnotes,acc.id as accID,
 			t.id as task_id,t.task_description,p.id as project_id,
-			p.project_name,u.id as im_id,u.first_name FROM ".$this->transactionTable." trans 
+			p.project_name,u.id as im_id,u.first_name,
+			sc.first_name as scfirst_name,sc.last_name as sclast_name,sc.id as scid FROM ".$this->transactionTable." trans 
 			LEFT JOIN ". $this->projectTable ." p ON p.id = trans.project_id 
 			LEFT JOIN ". $this->taskTabel ." t ON t.id = trans.task_id
 			LEFT JOIN ". $this->userTable ." u ON u.id = trans.im_id
+			LEFT JOIN ". $this->userTable ." sc ON sc.id = trans.sub_con_name
 			LEFT JOIN ". $this->accountTable ." acc ON acc.transaction_id = trans.id
 			WHERE trans.id = ?";		
 			$stmt = $this->conn->prepare($sqlQuery);

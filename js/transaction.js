@@ -158,7 +158,7 @@ $(document).ready(function () {
 					$('#site_id').val(data.site_id);
 					$('#site_name').val(data.site_name);
 					$('#sub_con_name').val(data.sub_con_name);
-					$('#sub_con_name').val(data.sub_con_name);
+					//$('#sub_con_name').val(data.sub_con_name);
 					$('#project_id').val(data.project_id);
 					the_task = data.task_id;
 					$("#project_id").change();
@@ -228,7 +228,7 @@ $(document).ready(function () {
 					$("#transaction_id").html(data.id);
 					$('#vsite_name').html(data.site_name);
 					$('#vsite_id').html(data.site_id);
-					$('#vsub_con_name').html(data.sub_con_name);
+					$('#vsub_con_name').html(data.scfirst_name + ' ' + data.sclast_name);
 					$('#vnotes').html(data.notes);
 					$('#vdate_of_install').html(data.date_of_installation);
 					$('#vproject_name').html(data.project_name);

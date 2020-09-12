@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 12, 2020 at 04:53 PM
+-- Generation Time: Sep 12, 2020 at 08:37 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -134,11 +134,11 @@ CREATE TABLE IF NOT EXISTS `pm_transaction` (
 --
 
 INSERT INTO `pm_transaction` (`id`, `site_name`, `site_id`, `sub_con_name`, `notes`, `date_of_installation`, `project_id`, `task_id`, `im_id`, `work_amount`, `status`, `status_note`, `created_by_id`, `date_created`) VALUES
-(5, 'site sample', 22, 'teh subcntractor', 'this is a note', '2020-09-01 21:00:00', 10, 15, 7, 0, 'pending', '', 0, '2020-09-07 18:08:46'),
-(6, 'site sample edit', 22, 'teh subcntractor', 'this is a note', '2020-09-07 21:00:00', 10, 16, 7, 77, 'approved', '', 0, '2020-09-08 09:06:44'),
-(7, 'Zarqa_princeHamzehAvenue', 33, 'yassien', 'this is a note', '2020-09-07 21:00:00', 11, 19, 7, 44, 'approved', '', 0, '2020-09-08 15:46:23'),
-(9, 'Jordan vally', 22, 'sub contractor 2 last', '', '2020-09-01 21:00:00', 11, 19, 7, 0, 'pending', NULL, 12, '2020-09-11 22:56:48'),
-(10, 'Jordan vally3', 34, 'sub contractor 2 last', '', '2020-09-07 11:54:17', 11, 18, 7, 0, 'pending', NULL, 12, '2020-09-11 22:58:28');
+(5, 'site sample', 22, '11', 'this is a note', '2020-09-01 21:00:00', 10, 15, 7, 0, 'pending', '', 0, '2020-09-07 18:08:46'),
+(6, 'site sample edit', 22, '11', 'this is a note', '2020-09-07 21:00:00', 10, 16, 7, 77, 'approved', '', 0, '2020-09-08 09:06:44'),
+(7, 'Zarqa_princeHamzehAvenue', 33, '11', 'this is a note', '2020-09-07 21:00:00', 11, 19, 7, 44, 'approved', '', 0, '2020-09-08 15:46:23'),
+(9, 'Jordan vally', 22, '12', '', '2020-09-01 21:00:00', 11, 19, 7, 0, 'pending', NULL, 12, '2020-09-11 22:56:48'),
+(10, 'Jordan vally3', 34, '12', '', '2020-09-07 11:54:17', 11, 18, 7, 0, 'pending', NULL, 12, '2020-09-11 22:58:28');
 
 -- --------------------------------------------------------
 

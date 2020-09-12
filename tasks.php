@@ -75,12 +75,12 @@ include('inc/header.php');
 						<h4 class="modal-title"><i class="fa fa-plus"></i> Edit Record</h4>
     				</div>
     				<div class="modal-body">
-						<div class="form-group"
+						<div class="form-group">
 							<label for="task_description" class="control-label">Task Description</label>
 							<input type="text" class="form-control" id="task_description" name="task_description" placeholder="Task Description" required>			
 						</div>
 					
-						<div class="form-group"
+						<div class="form-group">
 							<label for="task_description" class="control-label">Related to project:</label>
 							<select class="form-control" name="project_id" id="project_id" require>
 								<option value="">choose project</option>

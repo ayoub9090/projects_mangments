@@ -74,7 +74,7 @@ include('inc/header.php');
 						<h4 class="modal-title"><i class="fa fa-plus"></i> Edit Record</h4>
     				</div>
     				<div class="modal-body">
-						<div class="form-group"
+						<div class="form-group">
 							<label for="project" class="control-label">Project Name</label>
 							<input type="text" class="form-control" id="project_name" name="project_name" placeholder="project" required>			
 						</div>

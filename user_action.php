@@ -8,6 +8,8 @@ $db = $database->getConnection();
 $user = new Users($db);
 
 if(!empty($_POST['action']) && $_POST['action'] == 'listUsers') {
+	$user->user_role = $_SESSION["role"];
+	$user->user_id = $_SESSION["userid"];
 	$user->listUsers();
 }
 

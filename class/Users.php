@@ -9,17 +9,30 @@ class Users {
     }	    
 	
 	public function listUsers(){
-		
+		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
+		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
+
+
 		$sqlQuery = "SELECT u.first_name,u.last_name,u.id,u.email,u.phone,u.date_created,u.address,u.role,
 		uu.first_name as ufirst_name,uu.last_name as ulast_name FROM ".$this->usersTable. " u 
 		LEFT JOIN ". $this->usersTable ." uu ON uu.id = u.added_by_id
 		";
+
+		if($this->user_role !== "superAdmin" && empty($_POST["search"]["value"])){
+			$sqlQuery .= 'where(u.added_by_id = "'. $this->user_id .'") ';	
+		}
+
+
 		if(!empty($_POST["search"]["value"])){
-			$sqlQuery .= 'where(id LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR email LIKE "%'.$_POST["search"]["value"].'%" ';			
-			$sqlQuery .= ' OR first_name LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR last_name LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR role LIKE "%'.$_POST["search"]["value"].'%") ';								
+			$sqlQuery .= 'where(u.id LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR u.email LIKE "%'.$_POST["search"]["value"].'%" ';			
+			$sqlQuery .= ' OR u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR u.last_name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR u.role LIKE "%'.$_POST["search"]["value"].'%") ';	
+			
+			if($this->user_role !== "superAdmin"){
+				$sqlQuery .= 'AND (u.added_by_id = "'. $this->user_id .'") ';	
+			}	
 		}
 		
 		if(!empty($_POST["order"])){
@@ -36,7 +49,8 @@ class Users {
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->usersTable." ");
+		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->usersTable." ");
+		$stmtTotal = $this->conn->prepare($sqlQuery);
 		$stmtTotal->execute();
 		$allResult = $stmtTotal->get_result();
 		$allRecords = $allResult->num_rows;

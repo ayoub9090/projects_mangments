@@ -68,7 +68,10 @@ class Transaction {
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->transactionTable);
+		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->transactionTable);
+		$stmtTotal = $this->conn->prepare($sqlQuery);
+		
+
 		$stmtTotal->execute();
 		$allResult = $stmtTotal->get_result();
 		$allRecords = $allResult->num_rows;
@@ -237,7 +240,7 @@ class Transaction {
 
 
 	function subContractorList(){	
-		$stmt = $this->conn->prepare("SELECT * FROM ".$this->userTable." WHERE `role` = 'subContractor'");				
+		$stmt = $this->conn->prepare("SELECT * FROM ".$this->userTable." WHERE `role` = 'SubContractor'");				
 		$stmt->execute();			
 		$result = $stmt->get_result();		
 		return $result;

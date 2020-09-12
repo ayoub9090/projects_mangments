@@ -4,7 +4,7 @@ $(document).ready(function () {
 		"lengthChange": false,
 		"processing": true,
 		"serverSide": true,
-		"bFilter": false,
+		"bFilter": true,
 		'serverMethod': 'post',
 		"order": [],
 		"ajax": {

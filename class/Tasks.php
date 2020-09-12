@@ -3,6 +3,7 @@ class Tasks {
    
 	private $taskTable = 'pm_tasks';
 	private $projectTable = 'pm_projects';
+	private $userTable = 'pm_users';
 	private $conn;
 	
 	public function __construct($db){
@@ -10,15 +11,26 @@ class Tasks {
     }	    
 	
 	public function listTasks(){
-		
-		$sqlQuery = "SELECT t.id,t.task_description,p.project_name,p.id as project_id FROM ".$this->taskTable." t 
+		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
+		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
+
+		$sqlQuery = "SELECT t.id,t.task_description,p.project_name,p.user_id,p.id as project_id FROM ".$this->taskTable." t 
 		LEFT JOIN ". $this->projectTable ." p
-		ON p.id = t.project_id GROUP BY t.id ";
-	
+		ON p.id = t.project_id  
+		";
+
+		if($this->user_role == "Admin" && empty($_POST["search"]["value"])){
+			$sqlQuery .= 'where(p.user_id = "'. $this->user_id .'") ';	
+		}
+
 
 		if(!empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(t.id LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR t.task_description LIKE "%'.$_POST["search"]["value"].'%" ';						
+			$sqlQuery .= ' OR t.task_description LIKE "%'.$_POST["search"]["value"].'%" ';	
+			
+			if($this->user_role == "Admin"){
+				$sqlQuery .= 'AND (p.user_id = "'. $this->user_id .'") ';	
+			}	
 		}
 		
 		if(!empty($_POST["order"])){
@@ -35,7 +47,10 @@ class Tasks {
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->taskTable);
+		$stmtTotal = $this->conn->prepare($sqlQuery);
+		
+
+
 		$stmtTotal->execute();
 		$allResult = $stmtTotal->get_result();
 		$allRecords = $allResult->num_rows;
@@ -144,7 +159,11 @@ class Tasks {
 	}
 
 	function projectList(){		
-		$stmt = $this->conn->prepare("SELECT * FROM ".$this->projectTable." ORDER BY date_created DESC");				
+		if($_SESSION["role"] == "Admin"){
+			$stmt = $this->conn->prepare("SELECT * FROM ".$this->projectTable." where user_id=". $_SESSION["userid"]." ORDER BY date_created DESC ");	
+		}else{
+			$stmt = $this->conn->prepare("SELECT * FROM ".$this->projectTable." ORDER BY date_created DESC");	
+		}		
 		$stmt->execute();			
 		$result = $stmt->get_result();		
 		return $result;	

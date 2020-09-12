@@ -40,7 +40,10 @@ include('inc/header.php');
 					<h3 class="panel-title"></h3>
 				</div>
 				<div class="col-md-2" align="right">
+				<?php if($_SESSION["role"] !== 'Accountable'){ ?>
 					<button type="button" id="addTransaction" class="btn btn-info" title="Add transaction"><span class="glyphicon glyphicon-plus"></span></button>
+				<?php } ?>
+				
 				</div>
 			</div>
 		</div>
@@ -90,7 +93,15 @@ include('inc/header.php');
 							<?php if($_SESSION["role"] == 'SubContractor'){ ?>
 								<input type="text" value="<?php echo $_SESSION["name"]; ?>" class="form-control" id="sub_con_name" name="sub_con_name" placeholder="Sub-Con Name" readonly required>			
 							<?php }else{ ?>
-								<input type="text" class="form-control" id="sub_con_name" name="sub_con_name" placeholder="Sub-Con Name" required>			
+								<select class="form-control" name="sub_con_name" id="sub_con_name" required>
+								<option value="">select subContractor</option>
+								<?php 
+							$result = $transaction->subContractorList();
+							while ($subCon = $result->fetch_assoc()) { 	
+							?>
+								<option value="<?php echo $subCon['id']; ?>"><?php echo ucfirst($subCon['first_name']).' '.ucfirst($subCon['last_name']) ;?></option>							
+							<?php } ?>
+							</select>
 							<?php } ?>
 						</div>
 

@@ -10,16 +10,24 @@ class Project {
     }	    
 	
 	public function listProjects(){
-		
-		$sqlQuery = "SELECT p.id,p.project_name,u.first_name,u.last_name
+		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
+		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
+
+		$sqlQuery = "SELECT p.id,p.project_name,p.user_id,u.first_name,u.last_name
 		FROM " . $this->projectTable." p
 		LEFT JOIN ". $this->usersTable ." u ON u.id = p.user_id
 		";
-
+		if($this->user_role !== "superAdmin" && empty($_POST["search"]["value"])){
+			$sqlQuery .= 'where(p.user_id = "'. $this->user_id .'") ';	
+		}
 		if(!empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(p.id LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR p.project_name LIKE "%'.$_POST["search"]["value"].'%" ';						
-			$sqlQuery .= ' OR u.first_name LIKE "%'.$_POST["search"]["value"].'%" )';						
+			$sqlQuery .= ' OR u.first_name LIKE "%'.$_POST["search"]["value"].'%" )';	
+			
+			if($this->user_role !== "superAdmin"){
+				$sqlQuery .= 'AND (p.user_id = "'. $this->user_id .'") ';	
+			}					
 		}
 		
 		if(!empty($_POST["order"])){
@@ -36,7 +44,8 @@ class Project {
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->projectTable);
+		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->projectTable);
+		$stmtTotal = $this->conn->prepare($sqlQuery);
 		$stmtTotal->execute();
 		$allResult = $stmtTotal->get_result();
 		$allRecords = $allResult->num_rows;

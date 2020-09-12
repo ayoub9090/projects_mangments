@@ -8,6 +8,9 @@ $db = $database->getConnection();
 $task = new Tasks($db);
 
 if(!empty($_POST['action']) && $_POST['action'] == 'listTask') {
+	$task->user_role = $_SESSION["role"];
+	$task->user_id = $_SESSION["userid"];
+	
 	$task->listTasks();
 }
 

@@ -8,6 +8,8 @@ $db = $database->getConnection();
 $project = new Project($db);
 
 if(!empty($_POST['action']) && $_POST['action'] == 'listProject') {
+	$project->user_role = $_SESSION["role"];
+	$project->user_id = $_SESSION["userid"];
 	$project->listProjects();
 }
 

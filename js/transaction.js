@@ -48,13 +48,23 @@ $(document).ready(function () {
 		if (urlParams["sub_con"].length > 0) {
 			mainSubContractor = urlParams["sub_con"][0];
 		}
-		if (typeof (urlParams["daterange"]) !== "undefined") {
-			filterDate = urlParams["daterange"][0];
-			filterDate = filterDate.split("-");
-			filterDateFrom = filterDate[0];
-			filterDateTo = filterDate[1];
-			console.log(filterDateFrom + " " + filterDateTo);
+		if (typeof (urlParams["fromDate"]) !== "undefined") {
+			filterDate = urlParams["fromDate"][0];
+			filterDateFrom = filterDate;
+			console.log(filterDateFrom );
 		}
+		if (typeof (urlParams["toDate"]) !== "undefined") {
+			filterDate = urlParams["toDate"][0];
+			filterDateTo = filterDate;
+			console.log(filterDateTo);
+		}
+		// if (typeof (urlParams["daterange"]) !== "undefined") {
+		// 	filterDate = urlParams["daterange"][0];
+		// 	filterDate = filterDate.split("-");
+		// 	filterDateFrom = filterDate[0];
+		// 	filterDateTo = filterDate[1];
+		// 	console.log(filterDateFrom + " " + filterDateTo);
+		// }
 
 	}
 	var transactionRecords = $('#transactionListing').DataTable({

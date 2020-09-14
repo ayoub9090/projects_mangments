@@ -10,6 +10,29 @@ $(document).ready(function () {
 		$(this).next().show();
 	})
 
+	function removeURLParameter(url, parameter) {
+		
+		//prefer to use l.search if you have a location/link object
+		var urlparts= url.split('?');   
+		if (urlparts.length>=2) {
+	
+			var prefix= encodeURIComponent(parameter)+'=';
+			var pars= urlparts[1].split(/[&;]/g);
+	
+			//reverse iteration as may be destructive
+			for (var i= pars.length; i-- > 0;) {    
+				//idiom for string.startsWith
+				if (pars[i].lastIndexOf(prefix, 0) !== -1) {  
+					pars.splice(i, 1);
+				}
+			}
+	
+			url= urlparts[0]+'?'+pars.join('&');
+			return url;
+		} else {
+			return url;
+		}
+	}
 
 	function getUrlVars() {
 		var vars = [], hash;
@@ -20,28 +43,53 @@ $(document).ready(function () {
 		}
 		return vars;
 	}
+	if (getUrlVars().fromDate != undefined ){
+		var fromDateRange = getUrlVars().fromDate;
+		fromDateRange = decodeURIComponent(fromDateRange);
+		console.log(fromDateRange);
 
+	}
+	if (getUrlVars().toDate != undefined ){
+		var toDateRange = getUrlVars().toDate;
+		toDateRange = decodeURIComponent(toDateRange);
+		console.log(toDateRange);
+
+	}
+	
 	// if the Accountent selected a specific date will be as query string 
 	// if he didn't select will be the initials values
-	var _startDate = (getUrlVars().startDate != undefined ? getUrlVars().startDate : '2017/01/01')
-	var _endtDate = (getUrlVars().endDate != undefined ? getUrlVars().endDate : new Date())
-	console.log(getUrlVars())
-	$(function () {
-		$('input[name="daterange"]').daterangepicker({
-			locale: {
-				format: "YYYY/MM/DD",
-			},
-			opens: 'left',
-			showDropdowns: true, // to ability select years and month from dropdown list
-			minDate: '2017/01/01', // as client request 
-			maxDate: new Date(), // today date
-			startDate: _startDate,
-			endDate: _endtDate,
+	var _startDate = (fromDateRange != undefined ? fromDateRange : '2017/01/01')
+	var _endtDate = (toDateRange != undefined ? toDateRange : new Date())
+	
+	$('input[name="fromDate"]').daterangepicker({
+		locale: {
+			format: "YYYY/MM/DD",
+		},
+		singleDatePicker: true,
+		showDropdowns: true, // to ability select years and month from dropdown list
+		startDate:_startDate, // as client request 
+		endDate: _startDate, 
+		minDate:'2017/01/01',
+		maxDate: new Date(),
 
-		}, function (start, end, label) {
-			$('form').submit()
-		});
+
+
 	});
+	$('input[name="toDate"]').daterangepicker({
+		locale: {
+			format: "YYYY/MM/DD",
+		},
+		singleDatePicker: true,
+		showDropdowns: true, // to ability select years and month from dropdown list
+		startDate: _endtDate, // as client request 
+		minDate:'2017/01/01',
+		maxDate: new Date(),
+
+
+	});
+	$('.resetDate').on('click',function(){
+		window.location = window.location.href.split("?")[0];
+	})
 	// Transaction Date
 	$('input[name="date_of_intall"]').datepicker({
 		format: 'yyyy/mm/dd',

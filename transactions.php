@@ -40,9 +40,9 @@ include('inc/header.php');
             <div class="col-sm-1">
                 <h3 class="m-0">Filters</h3>
             </div>
-            <div class="col-sm-6 filters ">
+            <div class="col-sm-11 filters ">
                 <div class="row">
-                    <div class="form-group col-md-5">
+                    <div class="form-group col-md-4">
                         <label for="main_sub_con_name">By Subcontractor Name :</label>
                         <select class="form-control" name="sub_con" id="main_sub_con_name" >
                             <option value="">Select Sub contractor to view</option>
@@ -59,14 +59,30 @@ include('inc/header.php');
                             <?php } } ?>
                         </select>
                     </div>
-                    <div class="form-group  col-md-5">
-                        <label for="daterange">By Date Range :</label>
+                    <div class="col-md-4">
+                        <!-- <label for="daterange">By Date Range :</label> -->
 
-                        <input type="text" name="daterange" class="form-control" value="" class="w-100 "/>
+                        <div class="form-group">
+                            <label for="fromDate">From Date:</label>
+                            <input type="text" name="fromDate" class="form-control w-100 dateRange" value="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="toDate">To Date:</label>
+                            <input type="text" name="toDate" class="form-control w-100 dateRange" value="" />
+                        </div>
+                        
                     </div>
-                    <div class="form-group  col-md-2 ">
-                        <label for="submit"></label>
-                        <input type="submit" class="btn select-main_sub_con_name btn-primary btn-block w-100" value="View" />
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="submit" style="opacity:0;visibility:hidden">x</label>
+                            <input type="submit" class="btn select-main_sub_con_name btn-primary btn-block w-100" value="View Filtered Results" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn  btn-danger btn-block resetDate text-black" >
+                                Clear All Filters
+                            </button>
+                            
+                        </div>
                     </div>
                 </div>
                 

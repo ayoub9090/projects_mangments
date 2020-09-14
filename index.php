@@ -37,12 +37,13 @@ if(!empty($_POST["login"]) && !empty($_POST["email"]) && !empty($_POST["password
 include('inc/header.php');
 ?>
 <title></title>
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <?php include('inc/container.php');?>
 
-<div class="content"> 
-	<div class="container-fluid">
+<div class="container"> 
+	<div class="">
 				
-        <div class="col-md-6">                    
+        <div   style="width:50%;margin:0px auto">                    
 		<div class="panel panel-info">
 			<div class="panel-heading" style="background:#00796B;color:white;">
 				<div class="panel-title">Log In</div>                        

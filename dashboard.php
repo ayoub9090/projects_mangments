@@ -18,7 +18,7 @@ include('inc/header.php');
 <?php include('inc/container.php');?>
 <div class="container">  
 	<h3><?php if($_SESSION["userid"]) { echo $_SESSION["name"]; } ?> | <a href="logout.php">Logout</a> </h3><br>
-	<p>Welcome <?php echo $_SESSION["role"]; ?></p>	
+	<!-- <p>Welcome <?php  $_SESSION["role"]; ?></p>	 -->
 	<ul class="nav nav-tabs">
 		<?php if($_SESSION["role"] == 'manager') { ?>
 			<li class="active"><a href="clients.php">Clients</a></li>

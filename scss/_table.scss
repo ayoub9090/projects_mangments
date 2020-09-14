@@ -1,0 +1,15 @@
+.nav-tabs>li:hover>a,
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    background-color: $yellow;
+}
+.table-hover>tbody>tr:hover {
+    background-color: $blue;
+    color: #fff;
+}
+.dt-buttons {
+    margin-bottom: 10px;
+    @media (max-width: 768px) {
+        display: flex;
+        justify-content: space-between;
+    }
+}

@@ -10,7 +10,7 @@ $(document).ready(function () {
 
 	if (role === "Accountable") {
 		options = [{
-			"targets": [13, 14],
+			"targets": [0,1,2,5,6,9,13, 14],
 			"visible": false
 		}, {
 			"targets": [0, 12],

@@ -19,7 +19,9 @@ $(document).ready(function () {
 				"orderable": false,
 			},
 		],
-		"pageLength": 10
+		// "pageLength": 10,
+		iDisplayLength: -1
+
 	});
 
 	$('#addUser').click(function () {

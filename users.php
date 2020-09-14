@@ -35,18 +35,18 @@ include('inc/header.php');
 <?php include('inc/container.php');?>
 <div class="container">  
 	<?php include('top_menus.php'); ?>	
-	<div> 	
+	<div class="table-responsive"> 	
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-md-10">
 					<h3 class="panel-title"></h3>
 				</div>
-				<div class="col-md-2" align="right">
-					<button type="button" id="addUser" class="btn btn-info" title="Add User"><span class="glyphicon glyphicon-plus"></span></button>
+				<div class="col-md-2 text-right">
+					<button type="button" id="addUser" class="btn btn-info add" title="Add User"><span class="glyphicon glyphicon-plus"></span></button>
 				</div>
 			</div>
 		</div>
-		<table id="userListing" class="table table-bordered table-striped">
+		<table id="userListing" class="table table-bordered table-striped table-hover">
 			<thead>
 				<tr>
 					<th>#</th>

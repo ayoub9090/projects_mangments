@@ -38,23 +38,27 @@ class Tasks {
 		} else {
 			$sqlQuery .= 'ORDER BY t.date_created DESC ';
 		}
-		
+		$sqlQueryTotal = $sqlQuery;
+
 		if($_POST["length"] != -1){
 			$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
 		}
 		
+		
+		
+		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->taskTable);
+
+
 		$stmt = $this->conn->prepare($sqlQuery);
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		//$stmtTotal = $this->conn->prepare($sqlQuery);
-		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->taskTable);
-
-
+		$stmtTotal = $this->conn->prepare($sqlQueryTotal);
 		$stmtTotal->execute();
 		$allResult = $stmtTotal->get_result();
 		$allRecords = $allResult->num_rows;
-		
+
+
 		$displayRecords = $result->num_rows;
 		$records = array();		
 		while ($task = $result->fetch_assoc()) { 				

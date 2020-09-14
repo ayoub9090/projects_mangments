@@ -40,6 +40,7 @@ class Users {
 		} else {
 			$sqlQuery .= 'ORDER BY u.date_created DESC ';
 		}
+		$sqlQueryTotal = $sqlQuery;
 		
 		if($_POST["length"] != -1){
 			$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
@@ -49,8 +50,8 @@ class Users {
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->usersTable." ");
-		//$stmtTotal = $this->conn->prepare($sqlQuery);
+		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->usersTable." ");
+		$stmtTotal = $this->conn->prepare($sqlQueryTotal);
 		$stmtTotal->execute();
 		$allResult = $stmtTotal->get_result();
 		$allRecords = $allResult->num_rows;

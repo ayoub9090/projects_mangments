@@ -44,8 +44,8 @@ class Project {
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->projectTable);
-		$stmtTotal = $this->conn->prepare($sqlQuery);
+		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->projectTable);
+		//$stmtTotal = $this->conn->prepare($sqlQuery);
 		$stmtTotal->execute();
 		$allResult = $stmtTotal->get_result();
 		$allRecords = $allResult->num_rows;

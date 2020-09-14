@@ -47,8 +47,8 @@ class Tasks {
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		$stmtTotal = $this->conn->prepare($sqlQuery);
-		
+		//$stmtTotal = $this->conn->prepare($sqlQuery);
+		$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->taskTable);
 
 
 		$stmtTotal->execute();

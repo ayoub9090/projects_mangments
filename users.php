@@ -107,7 +107,8 @@ include('inc/header.php');
 								<option selected value="SubContractor">SubContractor</option>
 							<?php } ?>
 							<?php if($_SESSION["role"] == 'superAdmin'){ ?>
-								<option value="Admin" selected>Admin</option>
+								<option selected value="Admin" selected>Admin</option>
+								<option  value="SubContractor">SubContractor</option>
 								<option value="Accountable">Accountable</option>
 							<?php } ?>
 								

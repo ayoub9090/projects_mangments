@@ -21,7 +21,7 @@ if(!empty($_POST["login"]) && !empty($_POST["email"]) && !empty($_POST["password
 	$user->password = $_POST["password"];	
 	if($user->login()) {
 		if($_SESSION["role"] == 'Admin') {
-			header("Location: projects.php");
+			header("Location: transactions.php");
 		} else if($_SESSION["role"] == 'superAdmin') {
 			header("Location: users.php");
 		}else if($_SESSION["role"] == 'Accountable' || $_SESSION["role"] == 'SubContractor') {

@@ -162,10 +162,13 @@ include('inc/header.php');
                         <input type="text" class="form-control" id="site_id" name="site_id" placeholder="site id" required>
                     </div>
                     <div class="form-group">
-                        <label for="transaction" class="control-label">Sub-Con Name</label>
+                      
 
-
-                        <select <?php if($_SESSION["role"] == 'SubContractor'){ echo 'readonly disabled'; } ?> class="form-control" name="sub_con_name" id="sub_con_name" required>
+						<?php if($_SESSION["role"] == 'SubContractor'){  ?>
+							<input type="text" style="display:none;" class="form-control" id="sub_con_name" name="sub_con_name" value="<?php echo $_SESSION["userid"]; ?>" placeholder="" required>
+						<?Php }else{ ?>
+							<label for="transaction" class="control-label">Sub-Con Name</label>
+                        <select  class="form-control" name="sub_con_name" id="sub_con_name" required>
                             <option value="">select subContractor</option>
                             <?php 
 							$result = $transaction->subContractorList();
@@ -178,8 +181,9 @@ include('inc/header.php');
                             <?php }
 							} 
 							?>
-                        </select>
-
+						</select>
+						
+						<?php } ?>
                     </div>
 
                     <div class="form-group">

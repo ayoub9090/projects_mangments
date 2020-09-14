@@ -44,7 +44,7 @@ include('inc/header.php');
                 <div class="row">
                     <div class="form-group col-md-5">
                         <label for="main_sub_con_name">By Subcontractor Name :</label>
-                        <select class="form-control" name="sub_con" id="main_sub_con_name" required>
+                        <select class="form-control" name="sub_con" id="main_sub_con_name" >
                             <option value="">Select Sub contractor to view</option>
                             <?php 
                             $result3 = $transaction->subContractorList();

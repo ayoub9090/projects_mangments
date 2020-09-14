@@ -10,7 +10,7 @@ $(document).ready(function () {
 
 	if (role === "Accountable") {
 		options = [{
-			"targets": [0,1,2,5,6,9,13, 14],
+			"targets": [0, 1, 2, 5, 6, 9, 13, 14],
 			"visible": false
 		}, {
 			"targets": [0, 12],
@@ -39,11 +39,23 @@ $(document).ready(function () {
 	}
 	var mainSubContractor = "";
 	var urlString = location.href;
+	var filterDate = "";
+	var filterDateTo = "";
+	var filterDateFrom = "";
 	urlParams = parseURLParams(urlString);
+
 	if (typeof (urlParams) !== "undefined") {
 		if (urlParams["sub_con"].length > 0) {
 			mainSubContractor = urlParams["sub_con"][0];
 		}
+		if (typeof (urlParams["daterange"]) !== "undefined") {
+			filterDate = urlParams["daterange"][0];
+			filterDate = filterDate.split("-");
+			filterDateFrom = filterDate[0];
+			filterDateTo = filterDate[1];
+			console.log(filterDateFrom + " " + filterDateTo);
+		}
+
 	}
 	var transactionRecords = $('#transactionListing').DataTable({
 		"lengthChange": false,
@@ -67,7 +79,7 @@ $(document).ready(function () {
 		"ajax": {
 			url: "transaction_action.php",
 			type: "POST",
-			data: { action: 'listTransaction', mainSubContractor: mainSubContractor },
+			data: { action: 'listTransaction', mainSubContractor: mainSubContractor, filterDateFrom: filterDateFrom, filterDateTo: filterDateTo },
 			dataType: "json"
 		},
 		"columnDefs":

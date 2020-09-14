@@ -19,7 +19,7 @@ class Transaction {
 
 		$sqlQuery = "SELECT trans.id,trans.site_name,trans.site_id,
 		trans.date_of_installation,trans.status,trans.status_note,trans.work_amount,
-		trans.created_by_id,trans.sub_con_name,trans.notes,acc.payment_amount,acc.notes as accnotes,
+		trans.created_by_id,trans.sub_con_name,trans.notes,trans.date_created,acc.payment_amount,acc.notes as accnotes,
 		t.id as task_id,t.task_description,p.id as project_id,
 		p.project_name,u.first_name, u.last_name,sc.first_name as scfirst_name,sc.last_name as sclast_name, sc.id as scid FROM ".$this->transactionTable." trans
 		LEFT JOIN ". $this->projectTable ." p ON p.id = trans.project_id 
@@ -44,6 +44,11 @@ class Transaction {
 			if($this->sub_con_id){
 				$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
 				$sqlQuery .= 'AND (trans.sub_con_name = '.$this->sub_con_id.') ';
+			}
+			if($this->filterDateFrom){
+				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
+				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
+				$sqlQuery .= 'AND (trans.date_created  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 			}
 
 		}

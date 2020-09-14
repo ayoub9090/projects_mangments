@@ -12,10 +12,12 @@ if(!empty($_POST['action']) && $_POST['action'] == 'listTransaction') {
 	$transaction->user_id = $_SESSION["userid"];
 	
 	$transaction->sub_con_id = $_POST["mainSubContractor"];
-	
+	$transaction->filterDateFrom = $_POST["filterDateFrom"];
+	$transaction->filterDateTo = $_POST["filterDateTo"];
+
 	$transaction->listTransaction();
 }
-
+ 
 if(!empty($_POST['action']) && $_POST['action'] == 'addTransaction') {	
 	
 	$transaction->site_name = $_POST["site_name"];

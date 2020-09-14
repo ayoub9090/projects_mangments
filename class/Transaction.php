@@ -77,6 +77,13 @@ class Transaction {
 					$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
 					$sqlQuery .= 'AND (trans.sub_con_name = '.$this->sub_con_id.') ';
 				}
+
+				if($this->filterDateFrom){
+					$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
+					$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
+					$sqlQuery .= 'AND (trans.date_created  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				}
+
 			}
 
 		}

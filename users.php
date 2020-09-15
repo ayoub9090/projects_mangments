@@ -95,10 +95,18 @@ include('inc/header.php');
 							<label for="name" class="control-label">Address</label>
 							<input type="text" class="form-control" id="address" name="address"  required>			
 						</div>
+						<div class="form-group changePass-group">
+
+						<input type="checkbox" class="" id="changePass"  name="changePass"  />		
+							<label for="changePass">check to change password</label>	
+						</div>
+
 						<div class="form-group">
 							<label for="name" class="control-label">Password</label>
-							<input type="text" class="form-control" id="password" name="password"  required>			
+							<input type="text" class="form-control" id="password" name="password"  required>
+							
 						</div>
+					
 						<div class="form-group">
 							<label for="name" class="control-label">Role</label>
 							<select class="form-control" required  id="role" name="role">

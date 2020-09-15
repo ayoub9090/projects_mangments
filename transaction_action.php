@@ -49,6 +49,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'updateTransaction') {
 	$transaction->im_id = $_POST["im_id"];
 	$transaction->date_of_intall = $_POST["date_of_intall"];
 	$transaction->note = $_POST["note"];
+	
 
 	$transaction->update();
 }

@@ -205,6 +205,8 @@ class Transaction {
 			SET site_name= ?,site_id= ?, sub_con_name=?, notes=?, date_of_installation=?, project_id=?, task_id=?, im_id=?
 			WHERE id = ?");
 
+			
+
 			$this->id = htmlspecialchars(strip_tags($this->id));
 			$this->site_name = htmlspecialchars(strip_tags($this->site_name));
 			$this->site_id = htmlspecialchars(strip_tags($this->site_id));

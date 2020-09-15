@@ -32,6 +32,9 @@ $(document).ready(function () {
 
 		setTimeout(function () {
 			$('#userForm')[0].reset();
+			$('#changePass').prop("checked", true);
+			$('#password').prop('disabled', false)
+			$('.changePass-group').hide();
 			$('.modal-title').html("<i class='fa fa-plus'></i> Add User");
 			$('#action').val('addUser');
 			$('#save').val('Save');
@@ -53,10 +56,15 @@ $(document).ready(function () {
 					$('#first_name').val(data.first_name);
 					$('#last_name').val(data.last_name);
 					$('#email').val(data.email);
-					$('#password').val(data.password);
+					//$('#password').val(data.password);
+					$('#password').prop('disabled', true);
 					$('#phone').val(data.phone);
 					$('#address').val(data.address);
 					$('#role').val(data.role);
+
+					$('#changePass').prop("checked", false);
+					$('.changePass-group').show();
+
 					$('.modal-title').html("<i class='fa fa-plus'></i> Edit User");
 					$('#action').val('updateUser');
 					$('#save').val('Save');
@@ -67,6 +75,16 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+	$('#changePass').change(function () {
+
+		if (this.checked) {
+			$('#password').prop('disabled', false)
+		} else {
+			$('#password').prop('disabled', true)
+		}
+	});
+
 
 	$("#userModal").on('submit', '#userForm', function (event) {
 		event.preventDefault();

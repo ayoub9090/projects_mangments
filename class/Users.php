@@ -130,12 +130,17 @@ class Users {
 	public function update(){
 		
 		if($this->id) {			
-			
-			$stmt = $this->conn->prepare("
-			UPDATE ".$this->usersTable." 
-			SET first_name= ?, last_name = ?, email = ?, role = ?, password = ?, address = ?, phone = ?
-			WHERE id = ?");
-
+			if($this->changePass){
+				$stmt = $this->conn->prepare("
+				UPDATE ".$this->usersTable." 
+				SET first_name= ?, last_name = ?, email = ?, role = ?, password = ?, address = ?, phone = ?
+				WHERE id = ?");
+			}else{
+				$stmt = $this->conn->prepare("
+				UPDATE ".$this->usersTable." 
+				SET first_name= ?, last_name = ?, email = ?, role = ?, address = ?, phone = ?
+				WHERE id = ?");
+			}
 			$this->id = htmlspecialchars(strip_tags($this->id));
 			$this->first_name = htmlspecialchars(strip_tags($this->first_name));
 			$this->last_name = htmlspecialchars(strip_tags($this->last_name));
@@ -144,9 +149,14 @@ class Users {
 			$this->password = htmlspecialchars(strip_tags($this->password));				
 			$this->phone = htmlspecialchars(strip_tags($this->phone));
 			$this->address = htmlspecialchars(strip_tags($this->address));
-
-			$stmt->bind_param("sssssssi", $this->first_name, $this->last_name, $this->email, $this->role, $this->password,$this->address, $this->phone, $this->id);
+			$this->changePass = htmlspecialchars(strip_tags($this->changePass));
 			
+			if($this->changePass){
+				$stmt->bind_param("sssssssi", $this->first_name, $this->last_name, $this->email, $this->role, $this->password,$this->address, $this->phone, $this->id);
+			}else{
+				$stmt->bind_param("ssssssi", $this->first_name, $this->last_name, $this->email, $this->role, $this->address, $this->phone, $this->id);
+			}
+
 			if($stmt->execute()){
 				return true;
 			}

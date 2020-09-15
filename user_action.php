@@ -40,6 +40,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'updateUser') {
 	$user->phone = $_POST["phone"];
 	$user->address = $_POST["address"];
 	$user->password =  md5($_POST["password"]);
+	$user->changePass = $_POST["changePass"];
 	$user->update();
 }
 

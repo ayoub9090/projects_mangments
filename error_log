@@ -1,0 +1,86 @@
+[19-Sep-2020 06:55:12 America/Boise] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'sesjocom_WPPP1'@'localhost' to database 'sesjocom_projects' in /home2/sesjocom/public_html/pmo/config/Database.php on line 11
+[19-Sep-2020 06:55:12 America/Boise] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'sesjocom_WPPP1'@'localhost' to database 'sesjocom_projects' in /home2/sesjocom/public_html/pmo/config/Database.php on line 11
+[19-Sep-2020 06:55:13 America/Boise] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'sesjocom_WPPP1'@'localhost' to database 'sesjocom_projects' in /home2/sesjocom/public_html/pmo/config/Database.php on line 11
+[19-Sep-2020 06:55:24 America/Boise] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'sesjocom_WPPP1'@'localhost' to database 'sesjocom_projects' in /home2/sesjocom/public_html/pmo/config/Database.php on line 11
+[19-Sep-2020 06:55:25 America/Boise] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'sesjocom_WPPP1'@'localhost' to database 'sesjocom_projects' in /home2/sesjocom/public_html/pmo/config/Database.php on line 11
+[19-Sep-2020 06:57:06 America/Boise] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'sesjocom_pmo'@'localhost' to database 'sesjocom_projects' in /home2/sesjocom/public_html/pmo/config/Database.php on line 11
+[19-Sep-2020 06:57:07 America/Boise] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'sesjocom_pmo'@'localhost' to database 'sesjocom_projects' in /home2/sesjocom/public_html/pmo/config/Database.php on line 11
+[19-Sep-2020 07:01:42 America/Boise] PHP Warning:  include_once(class/users.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:01:42 America/Boise] PHP Warning:  include_once(): Failed opening 'class/users.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:01:42 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Users' not found in /home2/sesjocom/public_html/pmo/user_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/user_action.php on line 8
+[19-Sep-2020 07:03:45 America/Boise] PHP Warning:  include_once(class/users.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:03:45 America/Boise] PHP Warning:  include_once(): Failed opening 'class/users.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:03:45 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Users' not found in /home2/sesjocom/public_html/pmo/user_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/user_action.php on line 8
+[19-Sep-2020 07:03:54 America/Boise] PHP Warning:  include_once(class/users.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:03:54 America/Boise] PHP Warning:  include_once(): Failed opening 'class/users.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:03:54 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Users' not found in /home2/sesjocom/public_html/pmo/user_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/user_action.php on line 8
+[19-Sep-2020 07:11:26 America/Boise] PHP Warning:  include_once(class/users.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:11:26 America/Boise] PHP Warning:  include_once(): Failed opening 'class/users.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:11:26 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Users' not found in /home2/sesjocom/public_html/pmo/user_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/user_action.php on line 8
+[19-Sep-2020 07:11:36 America/Boise] PHP Warning:  include_once(class/users.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:11:36 America/Boise] PHP Warning:  include_once(): Failed opening 'class/users.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:11:36 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Users' not found in /home2/sesjocom/public_html/pmo/user_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/user_action.php on line 8
+[19-Sep-2020 07:18:40 America/Boise] PHP Warning:  include_once(class/users.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:18:40 America/Boise] PHP Warning:  include_once(): Failed opening 'class/users.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/user_action.php on line 3
+[19-Sep-2020 07:18:40 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Users' not found in /home2/sesjocom/public_html/pmo/user_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/user_action.php on line 8
+[19-Sep-2020 07:18:45 America/Boise] PHP Warning:  include_once(class/project.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/project_action.php on line 3
+[19-Sep-2020 07:18:45 America/Boise] PHP Warning:  include_once(): Failed opening 'class/project.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/project_action.php on line 3
+[19-Sep-2020 07:18:45 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Project' not found in /home2/sesjocom/public_html/pmo/project_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/project_action.php on line 8
+[19-Sep-2020 07:22:34 America/Boise] PHP Warning:  include_once(class/project.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/project_action.php on line 3
+[19-Sep-2020 07:22:34 America/Boise] PHP Warning:  include_once(): Failed opening 'class/project.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/project_action.php on line 3
+[19-Sep-2020 07:22:34 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Project' not found in /home2/sesjocom/public_html/pmo/project_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/project_action.php on line 8
+[19-Sep-2020 07:24:15 America/Boise] PHP Warning:  include_once(class/project.php): failed to open stream: No such file or directory in /home2/sesjocom/public_html/pmo/project_action.php on line 3
+[19-Sep-2020 07:24:15 America/Boise] PHP Warning:  include_once(): Failed opening 'class/project.php' for inclusion (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home2/sesjocom/public_html/pmo/project_action.php on line 3
+[19-Sep-2020 07:24:15 America/Boise] PHP Fatal error:  Uncaught Error: Class 'Project' not found in /home2/sesjocom/public_html/pmo/project_action.php:8
+Stack trace:
+#0 {main}
+  thrown in /home2/sesjocom/public_html/pmo/project_action.php on line 8
+[19-Sep-2020 11:24:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function sendMail() in /home2/sesjocom/public_html/pmo/class/Users.php:112
+Stack trace:
+#0 /home2/sesjocom/public_html/pmo/user_action.php(27): Users->insert()
+#1 {main}
+  thrown in /home2/sesjocom/public_html/pmo/class/Users.php on line 112
+[20-Sep-2020 06:17:11 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function execute() on boolean in /home2/sesjocom/public_html/pmo/class/Transaction.php:176
+Stack trace:
+#0 /home2/sesjocom/public_html/pmo/transaction_action.php(33): Transaction->insert()
+#1 {main}
+  thrown in /home2/sesjocom/public_html/pmo/class/Transaction.php on line 176
+[20-Sep-2020 06:31:47 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function execute() on boolean in /home2/sesjocom/public_html/pmo/class/Transaction.php:176
+Stack trace:
+#0 /home2/sesjocom/public_html/pmo/transaction_action.php(33): Transaction->insert()
+#1 {main}
+  thrown in /home2/sesjocom/public_html/pmo/class/Transaction.php on line 176
+[20-Sep-2020 06:34:24 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function execute() on boolean in /home2/sesjocom/public_html/pmo/class/Transaction.php:177
+Stack trace:
+#0 /home2/sesjocom/public_html/pmo/transaction_action.php(33): Transaction->insert()
+#1 {main}
+  thrown in /home2/sesjocom/public_html/pmo/class/Transaction.php on line 177
+[20-Sep-2020 09:34:58 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function execute() on boolean in /home2/sesjocom/public_html/pmo/class/Transaction.php:335
+Stack trace:
+#0 /home2/sesjocom/public_html/pmo/transaction_action.php(74): Transaction->updateStatus()
+#1 {main}
+  thrown in /home2/sesjocom/public_html/pmo/class/Transaction.php on line 335

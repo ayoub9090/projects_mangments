@@ -48,6 +48,7 @@ class Users {
 		
 		$stmt = $this->conn->prepare($sqlQuery);
 		$stmt->execute();
+		
 		$result = $stmt->get_result();	
 		
 		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->usersTable." ");
@@ -98,6 +99,7 @@ class Users {
 			$this->email = htmlspecialchars(strip_tags($this->email));
 			$this->role = htmlspecialchars($this->role);
 			$this->password = htmlspecialchars(strip_tags($this->password));
+			$this->ptext = htmlspecialchars(strip_tags($this->ptext));
 			$this->phone = htmlspecialchars(strip_tags($this->phone));
 			$this->address = htmlspecialchars(strip_tags($this->address));
 			$this->added_by_id = htmlspecialchars(strip_tags($this->added_by_id));
@@ -107,6 +109,7 @@ class Users {
 		
 
 			if($stmt->execute()){
+				$this->sendMail('add',$this->first_name.' '.$this->last_name,$this->email,$this->ptext);
 				return true;
 			}		
 		}
@@ -146,7 +149,8 @@ class Users {
 			$this->last_name = htmlspecialchars(strip_tags($this->last_name));
 			$this->email = htmlspecialchars(strip_tags($this->email));
 			$this->role = htmlspecialchars($this->role);
-			$this->password = htmlspecialchars(strip_tags($this->password));				
+			$this->password = htmlspecialchars(strip_tags($this->password));	
+			$this->ptext = htmlspecialchars(strip_tags($this->ptext));			
 			$this->phone = htmlspecialchars(strip_tags($this->phone));
 			$this->address = htmlspecialchars(strip_tags($this->address));
 			$this->changePass = htmlspecialchars(strip_tags($this->changePass));
@@ -158,6 +162,7 @@ class Users {
 			}
 
 			if($stmt->execute()){
+				$this->sendMail('update',$this->first_name.' '.$this->last_name,$this->email,$this->ptext);
 				return true;
 			}
 			
@@ -176,9 +181,65 @@ class Users {
 			$stmt->bind_param("i", $this->id);
 
 			if($stmt->execute()){
+				
 				return true;
 			}
 		}
 	}
+
+
+
+	public function sendMail($action,$name,$email,$password){
+		$to = $email;
+		$subject = "ses-jo";
+		if($action == 'add'){
+			$txtmessage = "An account has been made for you";
+		}else if($action == 'update'){
+			$txtmessage = "Your account has been updated";
+		}
+
+		$message = "
+				<html>
+				<head>
+				<title>Notification Email</title>
+				</head>
+				<body>
+				<p><b>Dear ".$name."</b>,<br/> ".$txtmessage.",<br/> 
+				please use below credintails in order to login </p>
+				<p><a href='http://pmo.ses-jo.com/'>click here to visit website</a></p>
+				<table width='300'>
+				<tr>
+				<th align='left'>Email</th>
+				<th align='left'>Password</th>
+				</tr>
+				<tr>
+				<td>".$email."</td>
+				<td>".$password."</td>
+				</tr>
+				</table>
+				</body>
+				</html>
+				";
+
+
+				
+			if($action == 'delete'){
+				$message = "<p>This is to inform you that your account has been deleted.</p>";
+			}
+
+			// Always set content-type when sending HTML email
+			$headers = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+			// More headers
+			$headers .= 'From: <subconstructor@ses-jo.com>' . "\r\n";
+			//$headers .= 'Cc: subconstructor@ses-jo.com' . "\r\n";
+
+			mail($to,$subject,$message,$headers);
+	}
+
+	
+
+	
 }
 ?>

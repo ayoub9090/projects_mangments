@@ -166,13 +166,35 @@ class Transaction {
 		
 	
 			if($stmt->execute()){
+
+				$uquery = "SELECT u.id,u.first_name,u.last_name,uu.id as sub_id,u.email,uu.first_name as sub_first_name,uu.first_name as sub_last_name,
+				uu.email as sub_email 
+				from ". $this->userTable ." u
+				LEFT JOIN ". $this->userTable ." uu ON uu.id = ".$this->sub_con_name.
+				" Where  u.id = ". $this->im_id;
+
+				$stmt = $this->conn->prepare($uquery);
+				$stmt->execute();
+				$result = $stmt->get_result();	
+				$row = $result->fetch_row();
+				
+				$imName  = $row[1].' '.$row[2];
+				$email  = $row[4];
+				$subName =  $row[5].' '.$row[6];
+				
+				//echo $imName.' '.$email;
+
+				$this->sendMail('add',$imName,	$subName,$email);
+				return true;
+				
+			}
+
+				
 				return true;
 			}		
 		}
-	}
-	
 
-	
+
 	public function getTransaction(){
 		if($this->id) {
 			$sqlQuery = "SELECT trans.id,trans.site_name,trans.site_id,
@@ -196,6 +218,7 @@ class Transaction {
 			echo json_encode($record);
 		}
 	}
+
 	public function update(){
 		
 		if($this->id) {			
@@ -306,6 +329,20 @@ class Transaction {
 		
 			
 			if($stmt->execute()){
+				$uquery = "SELECT t.id,t.sub_con_name,u.first_name,u.last_name ,u.email
+				from ". $this->transactionTable ." t
+				LEFT JOIN ". $this->userTable ." u ON u.id = t.sub_con_name 
+				Where  t.id = ". $this->id;
+
+				$stmt = $this->conn->prepare($uquery);
+				$stmt->execute();
+				$result = $stmt->get_result();	
+				$row = $result->fetch_row();
+				$name = $row[2].' '.$row[3];
+				$email  = $row[4];
+				//echo $email;
+				$this->updateStatusMail($this->status,$email,$name,$this->rejectReason);
+			
 				echo true;
 			}
 			
@@ -358,7 +395,91 @@ class Transaction {
 		}	
 	}
 
+	public function updateStatusMail($status,$email,$subName,$reason){
+		
+		$to = $email;
+		$subject = "ses-jo - Transaction updated";
 	
+if($status == "approved"){
+		$message = "
+				<html>
+				<head>
+				<title>Notification Email</title>
+				</head>
+				<body>
+				<p><b>Dear ".$subName."</b>,<br/> A transaction has been approved.,<br/> 
+				<p><a href='http://pmo.ses-jo.com/'>click here to visit website and check your transactions</a></p>
+				
+				</body>
+				</html>
+				";
+}else{
+	$message = "
+	<html>
+	<head>
+	<title>Notification Email</title>
+	</head>
+	<body>
+	<p><b>Dear ".$subName."</b>,<br/> A transaction has been rejected.,<br/> 
+	<p><a href='http://pmo.ses-jo.com/'>click here to visit website and check your transactions</a></p>
+	<br/>
+	<h4>Reason of rejected</h4>
+	<p>".$reason."</p>
+	</body>
+	</html>
+	";
+}
+
+				
+			
+
+			// Always set content-type when sending HTML email
+			$headers = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+			// More headers
+			$headers .= 'From: <subconstructor@ses-jo.com>' . "\r\n";
+			//$headers .= 'Cc: subconstructor@ses-jo.com' . "\r\n";
+
+			mail($to,$subject,$message,$headers);
+	}
+
+
+	
+	public function sendMail($action,$imName,$subName,$email){
+		
+		$to = $email;
+		$subject = "ses-jo - Transaction added";
+	
+
+		$message = "
+				<html>
+				<head>
+				<title>Notification Email</title>
+				</head>
+				<body>
+				<p><b>Dear ".$imName."</b>,<br/> A transaction has been added by ".$subName.",<br/> 
+				<p><a href='http://pmo.ses-jo.com/'>click here to visit website</a></p>
+				
+				</body>
+				</html>
+				";
+
+
+				
+			
+
+			// Always set content-type when sending HTML email
+			$headers = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+			// More headers
+			$headers .= 'From: <subconstructor@ses-jo.com>' . "\r\n";
+			//$headers .= 'Cc: subconstructor@ses-jo.com' . "\r\n";
+
+			mail($to,$subject,$message,$headers);
+	}
+
 
 }
 ?>

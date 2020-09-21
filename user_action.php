@@ -1,6 +1,6 @@
 <?php
 include_once 'config/Database.php';
-include_once 'class/users.php';
+include_once 'class/Users.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -21,6 +21,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'addUser') {
 	$user->phone = $_POST["phone"];
 	$user->address = $_POST["address"];
 	$user->password = md5($_POST["password"]);
+	$user->ptext = $_POST["password"];
 	$user->added_by_id = $_SESSION["userid"];
 
 	$user->insert();
@@ -40,6 +41,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'updateUser') {
 	$user->phone = $_POST["phone"];
 	$user->address = $_POST["address"];
 	$user->password =  md5($_POST["password"]);
+	$user->ptext = $_POST["password"];
 	$user->changePass = $_POST["changePass"];
 	$user->update();
 }

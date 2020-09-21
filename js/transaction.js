@@ -51,7 +51,7 @@ $(document).ready(function () {
 		if (typeof (urlParams["fromDate"]) !== "undefined") {
 			filterDate = urlParams["fromDate"][0];
 			filterDateFrom = filterDate;
-			console.log(filterDateFrom );
+			console.log(filterDateFrom);
 		}
 		if (typeof (urlParams["toDate"]) !== "undefined") {
 			filterDate = urlParams["toDate"][0];
@@ -198,6 +198,7 @@ $(document).ready(function () {
 					$('#date_of_intall').val(data.date_of_installation);
 					$('#note').val(data.notes);
 
+					$('#work_amount').val(data.work_amount);
 					$('.modal-title').html("<i class='fa fa-plus'></i> Edit Transaction");
 					$('#action').val('updateTransaction');
 					$('#save').val('Save');
@@ -267,7 +268,7 @@ $(document).ready(function () {
 					$('#vtask_name').html(data.task_description);
 					$('#vim_name').html(data.first_name);
 					$('#vstatus').html(data.status);
-
+					$('#work_amount').val(data.work_amount);
 					if (data.status !== "pending") {
 						$('#' + data.status).click();
 					} else {

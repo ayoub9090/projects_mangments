@@ -335,7 +335,7 @@ include('inc/header.php');
 
 
                     <div class="btn-group mb-3">
-                        <button type="button"  class="btn statUpdate btn-success">Submit</button>
+                        <button type="button"  class="btn statUpdate btn-success" data-dismiss="modal">Submit</button>
                     </div>
 
                 </form>

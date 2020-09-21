@@ -48,7 +48,7 @@ class Transaction {
 			if($this->filterDateFrom){
 				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
-				$sqlQuery .= 'AND (trans.date_created  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				$sqlQuery .= 'AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 			}
 
 		}
@@ -81,7 +81,8 @@ class Transaction {
 				if($this->filterDateFrom){
 					$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 					$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
-					$sqlQuery .= 'AND (trans.date_created  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+					
+					$sqlQuery .= 'AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 				}
 
 			}
@@ -120,7 +121,7 @@ class Transaction {
 			$rows[] = ucfirst($transaction['site_id']);
 			$rows[] = ucfirst($transaction['scfirst_name']).' '.ucfirst($transaction['sclast_name']);
 			
-			$rows[] = ucfirst($transaction['date_of_installation']);
+			$rows[] = date("yy-m-d", strtotime($transaction['date_of_installation'])); ;
 			$rows[] = ucfirst($transaction['project_name']);
 			$rows[] = ucfirst($transaction['task_description']);
 			$rows[] = ucfirst($transaction['first_name'].' '.$transaction['last_name']);		

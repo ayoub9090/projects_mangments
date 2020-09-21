@@ -17,17 +17,17 @@ class Project {
 		FROM " . $this->projectTable." p
 		LEFT JOIN ". $this->usersTable ." u ON u.id = p.user_id
 		";
-		if($this->user_role !== "superAdmin" && empty($_POST["search"]["value"])){
+		/*if($this->user_role !== "superAdmin" && empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(p.user_id = "'. $this->user_id .'") ';	
-		}
+		}*/
 		if(!empty($_POST["search"]["value"])){
 			$sqlQuery .= 'where(p.id LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR p.project_name LIKE "%'.$_POST["search"]["value"].'%" ';						
 			$sqlQuery .= ' OR u.first_name LIKE "%'.$_POST["search"]["value"].'%" )';	
 			
-			if($this->user_role !== "superAdmin"){
+			/*if($this->user_role !== "superAdmin"){
 				$sqlQuery .= 'AND (p.user_id = "'. $this->user_id .'") ';	
-			}					
+			}*/					
 		}
 		
 		if(!empty($_POST["order"])){

@@ -93,7 +93,7 @@ $(document).ready(function () {
 	// Transaction Date
 	$('input[name="date_of_intall"]').datepicker({
 		format: 'yyyy/mm/dd',
-		startDate: new Date()
+		// startDate: new Date()
 	});
 	/*$("#taskListing").on('click', 'span[id^="task_"]', function(){
 		

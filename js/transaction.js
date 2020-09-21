@@ -268,6 +268,12 @@ $(document).ready(function () {
 					$('#vtask_name').html(data.task_description);
 					$('#vim_name').html(data.first_name);
 					$('#vstatus').html(data.status);
+					if (data.status_note){
+						$('#vreason').parent().show()
+						$('#vreason').html(data.status_note);
+					}else{
+						$('#vreason').parent().hide()
+					}
 					$('#work_amount').val(data.work_amount);
 					if (data.status !== "pending") {
 						$('#' + data.status).click();
@@ -371,7 +377,7 @@ $(document).ready(function () {
 		var action = 'insertPaymentAmount';
 		var acc_ID = $('#acc_ID').val();
 
-		if (payment_amount <= 0) {
+		if (payment_amount < 0) {
 			alert('please insert payment amount');
 			return false;
 		}

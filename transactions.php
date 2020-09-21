@@ -308,6 +308,10 @@ include('inc/header.php');
                     <label for="name" class="control-label">Status:</label>
                     <span id="vstatus"></span>
                 </div>
+                <div class="form-group">
+                    <label for="name" class="control-label">Reason:</label>
+                    <span id="vreason"></span>
+                </div>
 
                 <input type="hidden" name="transID" id="transID" value="" />
 

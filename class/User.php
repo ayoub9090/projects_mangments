@@ -12,10 +12,10 @@ class User {
 		if($this->email && $this->password) {
 			$sqlQuery = "
 				SELECT * FROM ".$this->userTable." 
-				WHERE email = ? AND password = ?";			
+				WHERE LOWER(email) = ? AND password = ?";			
 			$stmt = $this->conn->prepare($sqlQuery);
 			$password = md5($this->password);
-			$stmt->bind_param("ss", $this->email, $password);	
+			$stmt->bind_param("ss", strtolower($this->email), $password);	
 			$stmt->execute();
 			$result = $stmt->get_result();
 			if($result->num_rows > 0){

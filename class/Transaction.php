@@ -131,7 +131,12 @@ class Transaction {
 			$rows[] = ucfirst($transaction['payment_amount']);
 			
 			$rows[] = '<button type="button" name="view" id="'.$transaction["id"].'" class="btn btn-info btn-xs view"><span class="glyphicon glyphicon-file" title="View"></span></button>';			
-			$rows[] = '<button type="button" name="update" id="'.$transaction["id"].'" class="btn btn-warning btn-xs update"><span class="glyphicon glyphicon-edit" title="Edit"></span></button>';
+			if(($transaction['status'] == "approved"  || $transaction['status'] == "pending") && $_SESSION["role"] == "SubContractor"){
+				$rows[] = '-';
+			}else{
+				$rows[] = '<button type="button" name="update" id="'.$transaction["id"].'" class="btn btn-warning btn-xs update"><span class="glyphicon glyphicon-edit" title="Edit"></span></button>';
+			}
+
 			$rows[] = '<button type="button" name="delete" id="'.$transaction["id"].'" class="btn btn-danger btn-xs delete" ><span class="glyphicon glyphicon-remove" title="Delete"></span></button>';
 			$records[] = $rows;
 		}
@@ -223,10 +228,14 @@ class Transaction {
 	public function update(){
 		
 		if($this->id) {			
-			
+			if($_SESSION["role"] == "SubContractor"){
+				$cc = "status='pending',";
+			}else{
+				$cc = "";
+			}
 			$stmt = $this->conn->prepare("
 			UPDATE ".$this->transactionTable." 
-			SET site_name= ?,site_id= ?, sub_con_name=?, notes=?, date_of_installation=?, project_id=?, task_id=?, im_id=?
+			SET ". $cc ." site_name= ?,site_id= ?, sub_con_name=?, notes=?, date_of_installation=?, project_id=?, task_id=?, im_id=?
 			WHERE id = ?");
 
 			

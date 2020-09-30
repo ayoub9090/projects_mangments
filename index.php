@@ -24,8 +24,10 @@ if(!empty($_POST["login"]) && !empty($_POST["email"]) && !empty($_POST["password
 			header("Location: transactions.php");
 		} else if($_SESSION["role"] == 'superAdmin') {
 			header("Location: users.php");
-		}else if($_SESSION["role"] == 'Accountable' || $_SESSION["role"] == 'SubContractor') {
+		}else if($_SESSION["role"] == 'SubContractor') {
 			header("Location: transactions.php");
+		}else if($_SESSION["role"] == 'Accountable'){
+			header("Location: summary_report.php");
 		}
 
 	} else {

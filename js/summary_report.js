@@ -3,41 +3,12 @@ $(document).ready(function () {
 	var the_task;
 
 
-	var options = [
-		{
-			"targets": [0, 11, 12, 13],
-			"orderable": false,
-		}];
+	var options = [{
+		"targets": [0, 5],
+		"orderable": false,
+	}];
 
-	if (role === "Accountable") {
-		options = [{
-			"targets": [0, 1, 2, 5, 6, 9, 12, 13],
-			"visible": false
-		}, {
-			"targets": [0, 11],
-			"orderable": false
-		}];
-	}
 
-	if (role === "Admin") {
-		options = [{
-			"targets": [12],
-			"visible": false
-		}, {
-			"targets": [0, 11, 13],
-			"orderable": false
-		}];
-	}
-
-	if (role === "SubContractor") {
-		options = [{
-			"targets": [13],
-			"visible": false
-		}, {
-			"targets": [0, 11, 13],
-			"orderable": false
-		}];
-	}
 	var mainSubContractor = "";
 	var urlString = location.href;
 	var filterDate = "";
@@ -59,13 +30,7 @@ $(document).ready(function () {
 			filterDateTo = filterDate;
 			console.log(filterDateTo);
 		}
-		// if (typeof (urlParams["daterange"]) !== "undefined") {
-		// 	filterDate = urlParams["daterange"][0];
-		// 	filterDate = filterDate.split("-");
-		// 	filterDateFrom = filterDate[0];
-		// 	filterDateTo = filterDate[1];
-		// 	console.log(filterDateFrom + " " + filterDateTo);
-		// }
+
 
 	}
 	var transactionRecords = $('#transactionListing').DataTable({
@@ -88,9 +53,9 @@ $(document).ready(function () {
 		"order": [],
 
 		"ajax": {
-			url: "transaction_action.php",
+			url: "summary_report_action.php",
 			type: "POST",
-			data: { action: 'listTransaction', mainSubContractor: mainSubContractor, filterDateFrom: filterDateFrom, filterDateTo: filterDateTo },
+			data: { action: 'listContractors', mainSubContractor: mainSubContractor, filterDateFrom: filterDateFrom, filterDateTo: filterDateTo },
 			dataType: "json"
 		},
 		"columnDefs":
@@ -110,7 +75,7 @@ $(document).ready(function () {
 
 			// Total over all pages
 			total = api
-				.column(10)
+				.column(2)
 				.data()
 				.reduce(function (a, b) {
 					return intVal(a) + intVal(b);
@@ -118,20 +83,20 @@ $(document).ready(function () {
 
 			// Total over this page
 			pageTotal = api
-				.column(10, { page: 'current' })
+				.column(2, { page: 'current' })
 				.data()
 				.reduce(function (a, b) {
 					return intVal(a) + intVal(b);
 				}, 0);
 
 			// Update footer
-			$(api.column(10).footer()).html(
+			$(api.column(2).footer()).html(
 				'' + pageTotal + '<br>\n ( ' + total + ' total)'
 			);
 
 			// Total over all pages
 			total1 = api
-				.column(11)
+				.column(3)
 				.data()
 				.reduce(function (a, b) {
 					return intVal(a) + intVal(b);
@@ -139,14 +104,14 @@ $(document).ready(function () {
 
 			// Total over this page
 			pageTotal1 = api
-				.column(11, { page: 'current' })
+				.column(3, { page: 'current' })
 				.data()
 				.reduce(function (a, b) {
 					return intVal(a) + intVal(b);
 				}, 0);
 
 			// Update footer
-			$(api.column(11).footer()).html(
+			$(api.column(3).footer()).html(
 				'' + pageTotal1 + '<br>\n ( ' + total1 + ' total)' + '<br>\n<br>\n'
 			);
 
@@ -283,7 +248,7 @@ $(document).ready(function () {
 					}
 
 					$('#rejectReason').val(data.status_note);
-
+					$('#payment_amount').val(data.payment_amount);
 					$('#acc_note').val(data.accnotes);
 					$('#acc_ID').val(data.accID);
 				}).modal();
@@ -337,66 +302,9 @@ $(document).ready(function () {
 
 	});
 
-	$('.statUpdate').click(function () {
-		var id = $('#transID').val();
-		var work_amount = $('#work_amount').val();
-		var rejectReason = $('#rejectReason').val();
-		var status = $("input[name=status]:checked").val();
 
 
-		var action = 'statusChange';
 
-		if (status === 'approved' && work_amount <= 0) {
-			alert('please insert work amount');
-			return false;
-		}
-		if (rejectReason === '' && status === 'rejected') {
-			alert('please insert reject reason');
-			return false;
-		}
-
-		$.ajax({
-			url: 'transaction_action.php',
-			method: "POST",
-			data: { id: id, work_amount: work_amount, rejectReason: rejectReason, status: status, action: action },
-			dataType: "json",
-			success: function (data) {
-				$('#transactionDetails').modal("toggle");
-				transactionRecords.ajax.reload();
-				console.log(data);
-			}
-		});
-
-		return false;
-	})
-
-
-	$('.accountableUpdate').click(function () {
-		var id = $('#transID').val();
-		var acc_note = $('#acc_note').val();
-
-		var action = 'insertPaymentAmount';
-		var acc_ID = $('#acc_ID').val();
-
-		if (payment_amount < 0) {
-			alert('please insert payment amount');
-			return false;
-		}
-
-		$.ajax({
-			url: 'transaction_action.php',
-			method: "POST",
-			data: { id: id, acc_note: acc_note, acc_ID: acc_ID, payment_amount: payment_amount, action: action },
-			dataType: "json",
-			success: function (data) {
-				$('#transactionDetails').modal("toggle");
-				transactionRecords.ajax.reload();
-				console.log(data);
-			}
-		});
-
-		return false;
-	})
 
 
 });

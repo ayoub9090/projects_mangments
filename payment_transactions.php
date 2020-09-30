@@ -1,14 +1,14 @@
 <?php
 include_once 'config/Database.php';
 include_once 'class/User.php';
-include_once 'class/Transaction.php';
+include_once 'class/SummaryReport.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $user = new User($db);
 
-$transaction = new Transaction($db);
+$transaction = new SummaryReport($db);
 
 
 if(!$user->loggedIn()) {
@@ -27,13 +27,13 @@ include('inc/header.php');
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
 
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
-<script src="js/transaction.js"></script>
+<script src="js/payment_transaction.js"></script>
 <script src="js/general.js"></script>
 <?php include('inc/container.php');?>
 <div class="container">
     <?php include('top_menus.php'); ?>
 
-    <?php if($_SESSION["role"] == 'Accountable'){ ?>
+ 
     <form action="">
         <!-- <div class="form-group--select"> -->
         <div class="row ">
@@ -90,7 +90,7 @@ include('inc/header.php');
         </div>
     </form>
 
-<?php } ?>
+
 
 <div> 	
     <div class="panel-heading">
@@ -99,9 +99,9 @@ include('inc/header.php');
                 <h3 class="panel-title"></h3>
             </div>
             <div class="col-md-2 text-right">
-                <?php if($_SESSION["role"] !== 'Accountable'){ ?>
-                <button type="button" id="addTransaction" class="btn btn-info add" title="Add transaction"><span class="glyphicon glyphicon-plus"></span></button>
-                <?php } ?>
+           <?php if($_SESSION["role"] == "Accountable"){ ?>
+                <button type="button" id="addTransaction" class="btn btn-info add" title="Add payment"><span class="glyphicon glyphicon-plus"></span></button>
+           <?php } ?>
                 
             </div>
         </div>
@@ -112,50 +112,18 @@ include('inc/header.php');
 				<tr>
 					<th>#</th>
 
-					<th>Site Name</th>
-					<th>Site NO</th>
-					<th>Sub-Con Name</th>
-					<th>Date of Installation</th>
-					<th>Project Name</th>
-					<th>Task Description</th>
-					<th>IM Name</th>
-					<th>Notes</th>
-					<th>Status</th>
-					<th>Work Amount</th>
-					
-					<th></th>
-					<th></th>
-					<th></th>
+					<th>Subcontractor Name</th>
+					<th>Date</th>		
+                    <th>Note</th>
+                    <th>Payment Amount</th>
+			
+				
 				</tr>
 			</thead>
 
-			<?php if($_SESSION["role"] == 'Accountable'){ ?>
-			<tfoot>
-				<tr>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th  style="text-align:right">Total:</th>
-					<th style="text-align:right">Total:</th>
-					<th></th>
-					<th></th>
-					<th></th>
-
-
-				</tr>
-				<tr>
-					<th colspan="15" class="balance" style="text-align:right">Balance:</th>
-
-				</tr>
-			</tfoot>
-			<?php } ?>
+			
+			
+		
 		</table>
 	</div>
     
@@ -169,76 +137,36 @@ include('inc/header.php');
                     <h4 class="modal-title"><i class="fa fa-plus"></i> Edit Record</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="transaction" class="control-label">Site Name</label>
-                        <input type="text" class="form-control" id="site_name" name="site_name" placeholder="site name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="transaction" class="control-label">Site NO</label>
-                        <input type="text" class="form-control" id="site_id" name="site_id" placeholder="site id" required>
-                    </div>
-                    <div class="form-group">
-                      
 
-						<?php if($_SESSION["role"] == 'SubContractor'){  ?>
-							<input type="text" style="display:none;" class="form-control" id="sub_con_name" name="sub_con_name" value="<?php echo $_SESSION["userid"]; ?>" placeholder="" required>
-						<?Php }else{ ?>
-							<label for="transaction" class="control-label">Sub-Con Name</label>
-                        <select  class="form-control" name="sub_con_name" id="sub_con_name" required>
-                            <option value="">select subContractor</option>
-                            <?php 
-							$result = $transaction->subContractorList();
-							while ($subCon = $result->fetch_assoc()) { 	
-							?>
-                            <?php if($_SESSION["role"] == 'SubContractor' && $subCon['id'] == $_SESSION["userid"]){ ?>
-                            <option selected value="<?php echo $subCon['id']; ?>"><?php echo ucfirst($subCon['first_name']).' '.ucfirst($subCon['last_name']); ?></option>
-                            <?php }else{ ?>
-                            <option value="<?php echo $subCon['id']; ?>"><?php echo ucfirst($subCon['first_name']).' '.ucfirst($subCon['last_name']); ?></option>
-                            <?php }
-							} 
-							?>
-						</select>
-						
-						<?php } ?>
-                    </div>
-
+                <div class="form-group">
+                      						
+                                              <label for="transaction" class="control-label">Sub-Con Name</label>
+                                          <select  class="form-control" name="sub_con_name" id="sub_con_name" required>
+                                              <option value="">select subContractor</option>
+                                              <?php 
+                                              $result = $transaction->subContractorList();
+                                              while ($subCon = $result->fetch_assoc()) { 	
+                                              ?>
+                                         <?php if(isset($_GET['sub_con']) && $_GET['sub_con'] ==  $subCon['id']){ ?>
+                                            <option selected value="<?php echo $subCon['id']; ?>"><?php echo ucfirst($subCon['first_name']).' '.ucfirst($subCon['last_name']); ?></option>
+                                         <?php }else{ ?>
+                                              <option value="<?php echo $subCon['id']; ?>"><?php echo ucfirst($subCon['first_name']).' '.ucfirst($subCon['last_name']); ?></option>
+                                         <?php
+                                         }
+                                              } 
+                                              ?>
+                                          </select>
+                                      
+                                      </div>
+                  
                     <div class="form-group">
-                        <label for="task_description" class="control-label">Project Name</label>
-                        <select class="form-control" name="project_id" id="project_id" required>
-                            <option value="">select project</option>
-                            <?php 
-							$result = $transaction->projectList();
-							while ($project = $result->fetch_assoc()) { 	
-							?>
-                            <option value="<?php echo $project['id']; ?>"><?php echo ucfirst($project['project_name']) ?></option>
-                            <?php } ?>
-                        </select>
+                        <label for="transaction" class="control-label">Payment Amount</label>
+                        <input type="number" class="form-control" id="payment_amount" name="payment_amount" placeholder="payment_amount" required>
                     </div>
-
-                    <div class="form-group">
-                        <label for="task_description" class="control-label">Task Description</label>
-                        <select class="form-control" name="task_id" id="task_id" required>
-                            <option value="">select task</option>
-
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="task_description" class="control-label">IM Name</label>
-                        <select class="form-control" name="im_id" id="im_id" required>
-                            <option value="">select IM</option>
-                            <?php 
-							$result2 = $transaction->imList();
-							while ($im = $result2->fetch_assoc()) { 	
-							?>
-                            <option value="<?php echo $im['id']; ?>"><?php echo ucfirst($im['first_name']).' '.ucfirst($im['last_name']); ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="transaction" class="control-label">Date of installation</label>
-                        <input type="text" class="form-control" id="date_of_intall" name="date_of_intall" placeholder="Date of installation" required>
-                    </div>
+                   
+            
+               
+              
  
 
                     <div class="form-group">

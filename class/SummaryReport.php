@@ -1,5 +1,5 @@
 <?php
-class Transaction {	
+class SummaryReport {	
    
 	private $transactionTable = 'pm_transaction';
 	private $projectTable = 'pm_projects';
@@ -13,86 +13,63 @@ class Transaction {
         $this->conn = $db;
     }	    
 	
-	public function listTransaction(){
+	public function listContractors(){
 		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
 		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
 
-		$sqlQuery = "SELECT trans.id,trans.site_name,trans.site_id,
-		trans.date_of_installation,trans.status,trans.status_note,trans.work_amount,
-		trans.created_by_id,trans.sub_con_name,trans.notes,trans.date_created,
-		t.id as task_id,t.task_description,p.id as project_id,
-		p.project_name,u.first_name, u.last_name,sc.first_name as scfirst_name,sc.last_name as sclast_name, sc.id as scid FROM ".$this->transactionTable." trans
-		LEFT JOIN ". $this->projectTable ." p ON p.id = trans.project_id 
-		LEFT JOIN ". $this->taskTabel ." t ON t.id = trans.task_id
-		LEFT JOIN ". $this->userTable ." u ON u.id = trans.im_id
-		LEFT JOIN ". $this->userTable ." sc ON sc.id = trans.sub_con_name
+		$sqlQuery = "SELECT u.first_name, u.last_name,t.status, t.sub_con_name, 
+		COUNT(t.work_amount) as numberOfTransations,
+		SUM(t.work_amount) total_work_amount,
+		SUM(p.payment_amount) total_payment_amount, 
+        (SUM(t.work_amount) - SUM(p.payment_amount))  'balance'
+		From pm_transaction t 
+        LEFT JOIN pm_users u on u.id = t.sub_con_name 
+        LEFT JOIN pm_accounts p on p.subcontractor_id = t.sub_con_name 
 		";
 
+	
 
-
-		if($this->user_role == "SubContractor" && empty($_POST["search"]["value"])){
-			$sqlQuery .= 'where(trans.created_by_id = "'. $this->user_id .'") ';	
-		}
-
-		if($this->user_role == "Admin" && empty($_POST["search"]["value"])){
-			$sqlQuery .= 'where(trans.im_id = "'. $this->user_id .'") ';	
-		}
-
-		if($this->user_role == "Accountable" && empty($_POST["search"]["value"])){
-			$sqlQuery .= 'where(trans.status = "Approved") ';	
+		if(empty($_POST["search"]["value"])){
+			$sqlQuery .= ' where(t.status = "Approved") ';	
 			if($this->sub_con_id){
 				$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
-				$sqlQuery .= 'AND (trans.sub_con_name = '.$this->sub_con_id.') ';
+				$sqlQuery .= ' AND (t.sub_con_name = '.$this->sub_con_id.') ';
 			}
 			if($this->filterDateFrom){
 				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
-				$sqlQuery .= 'AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				//$sqlQuery .= ' AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 			}
 
 		}
 
 		if(!empty($_POST["search"]["value"])){
-			$sqlQuery .= 'where(trans.id LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR trans.site_name LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR trans.site_id LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR p.project_name LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR t.task_description LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR trans.status LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR trans.work_amount LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR trans.date_of_installation LIKE "%'.$_POST["search"]["value"].'%") ';
-			if($this->user_role == "SubContractor"){
-				$sqlQuery .= 'AND (trans.created_by_id = "'. $this->user_id .'") ';	
-			}
-			if($this->user_role == "Admin"){
-				$sqlQuery .= 'AND (trans.im_id = "'. $this->user_id .'") ';	
-			}
-
-			if($this->user_role == "Accountable"){
-				$sqlQuery .= 'AND (trans.status = "Approved") ';	
+			$sqlQuery .= ' where(u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR u.last_name LIKE "%'.$_POST["search"]["value"].'%" )';
+		
+				$sqlQuery .= ' AND (t.status = "Approved") ';	
 
 				if($this->sub_con_id && $this->sub_con_id > 0){
 					$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
-					$sqlQuery .= 'AND (trans.sub_con_name = '.$this->sub_con_id.') ';
+					$sqlQuery .= ' AND (t.sub_con_name = '.$this->sub_con_id.') ';
 				}
 
 				if($this->filterDateFrom){
 					$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 					$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
 					
-					$sqlQuery .= 'AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+					//$sqlQuery .= 'AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 				}
-
-			}
-
 		}
-		
+		$sqlQuery .= " GROUP by t.sub_con_name ";
 		if(!empty($_POST["order"])){
 			$sqlQuery .= 'ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
 		} else {
-			$sqlQuery .= 'ORDER BY trans.date_created DESC ';
+			//$sqlQuery .= 'ORDER BY trans.date_created DESC ';
 		}
+
+
+	
 		$sqlQueryTotal = $sqlQuery;
 		
 		if($_POST["length"] != -1){
@@ -113,30 +90,19 @@ class Transaction {
 		
 		$displayRecords = $result->num_rows;
 		$records = array();		
+
+		
 		while ($transaction = $result->fetch_assoc()) { 				
 			$rows = array();			
-			$rows[] = $transaction['id'];
-			$rows[] = ucfirst($transaction['site_name']);
-			$rows[] = ucfirst($transaction['site_id']);
-			$rows[] = ucfirst($transaction['scfirst_name']).' '.ucfirst($transaction['sclast_name']);
-			
-			$rows[] = date("yy-m-d", strtotime($transaction['date_of_installation'])); ;
-			$rows[] = ucfirst($transaction['project_name']);
-			$rows[] = ucfirst($transaction['task_description']);
-			$rows[] = ucfirst($transaction['first_name'].' '.$transaction['last_name']);		
-			$rows[] = ucfirst($transaction['notes']);
-			$rows[] = ucfirst($transaction['status']);
-			$rows[] = ucfirst($transaction['work_amount']);
+			$rows[] = $transaction['sub_con_name'];
+			$rows[] = ucfirst($transaction['first_name']).' '.ucfirst($transaction['last_name']);
+			$rows[] = $transaction['total_work_amount'];
+			$rows[] = $transaction['total_payment_amount'];
+			$rows[] = $transaction['balance'];
 			
 			
-			$rows[] = '<button type="button" name="view" id="'.$transaction["id"].'" class="btn btn-info btn-xs view"><span class="glyphicon glyphicon-file" title="View"></span></button>';			
-			if(($transaction['status'] == "approved"  || $transaction['status'] == "pending") && $_SESSION["role"] == "SubContractor"){
-				$rows[] = '-';
-			}else{
-				$rows[] = '<button type="button" name="update" id="'.$transaction["id"].'" class="btn btn-warning btn-xs update"><span class="glyphicon glyphicon-edit" title="Edit"></span></button>';
-			}
+			$rows[] = '<a  href="payment_transactions.php?sub_con='.$transaction["sub_con_name"].'" id="'.$transaction["sub_con_name"].'" class="btn btn-info btn-xs "><span class="glyphicon glyphicon-eye-open" title="View"></span></a>';			
 
-			$rows[] = '<button type="button" name="delete" id="'.$transaction["id"].'" class="btn btn-danger btn-xs delete" ><span class="glyphicon glyphicon-remove" title="Delete"></span></button>';
 			$records[] = $rows;
 		}
 		
@@ -151,54 +117,125 @@ class Transaction {
 	}
 	
 
+	
+	public function listPayments(){
+		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
+		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
 
+		$sqlQuery = "SELECT p.id,u.first_name,u.last_name,p.created_date,p.subcontractor_id,p.notes,p.payment_amount FROM pm_accounts p 
+		LEFT JOIN pm_users u ON u.id = p.subcontractor_id  
+		";
+
+	
+
+		if(empty($_POST["search"]["value"])){
+			//$sqlQuery .= ' where(t.status = "Approved") ';	
+			if($this->sub_con_id){
+				$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
+				$sqlQuery .= 'where (p.subcontractor_id = '.$this->sub_con_id.') ';
+			}
+			if($this->filterDateFrom){
+				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
+				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
+				$sqlQuery .= ' AND (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+			}
+
+		}
+
+		if(!empty($_POST["search"]["value"])){
+			$sqlQuery .= ' where(u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR u.last_name LIKE "%'.$_POST["search"]["value"].'%" )';
+				if($this->sub_con_id && $this->sub_con_id > 0){
+					$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
+					$sqlQuery .= ' AND (p.subcontractor_id = '.$this->sub_con_id.') ';
+				}
+
+				if($this->filterDateFrom){
+					$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
+					$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
+					
+					$sqlQuery .= ' AND (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				}
+		}
+		
+		if(!empty($_POST["order"])){
+			$sqlQuery .= 'ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
+		} else {
+			$sqlQuery .= 'ORDER BY p.created_date DESC ';
+		}
+
+
+		
+		$sqlQueryTotal = $sqlQuery;
+		
+		if($_POST["length"] != -1){
+			$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
+		}
+		
+		$stmt = $this->conn->prepare($sqlQuery);
+		$stmt->execute();
+		$result = $stmt->get_result();	
+		
+		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->transactionTable);
+		$stmtTotal = $this->conn->prepare($sqlQueryTotal);
+		
+
+		$stmtTotal->execute();
+		$allResult = $stmtTotal->get_result();
+		$allRecords = $allResult->num_rows;
+		
+		$displayRecords = $result->num_rows;
+		$records = array();		
+
+		
+		while ($transaction = $result->fetch_assoc()) { 				
+			$rows = array();			
+			$rows[] = $transaction['id'];
+			$rows[] = ucfirst($transaction['first_name']).' '.ucfirst($transaction['last_name']);
+			
+		
+			$date = strtotime($transaction['created_date']); 
+			
+			$rows[] = date('d-m-yy', $date);
+			$rows[] = $transaction['notes'];
+			$rows[] = $transaction['payment_amount'];
+			
+				
+
+			$records[] = $rows;
+		}
+		
+		$output = array(
+			"draw"	=>	intval($_POST["draw"]),			
+			"iTotalRecords"	=> 	$displayRecords,
+			"iTotalDisplayRecords"	=>  $allRecords,
+			"data"	=> 	$records
+		);
+		
+		echo json_encode($output);
+	}
+	
 
 	public function insert(){
 	
-		if($this->site_name) {
-
+		if($this->payment_amount) {
+			
 			$stmt = $this->conn->prepare("
-			INSERT INTO ".$this->transactionTable."(`site_name`, `site_id`, `sub_con_name`, `notes`, `date_of_installation`, `project_id`, `task_id`, `im_id`,`created_by_id`)
-			VALUES(?,?,?,?,?,?,?,?,?)");
-			$this->created_user_id = htmlspecialchars(strip_tags($this->created_user_id));	
-			$this->site_name = htmlspecialchars(strip_tags($this->site_name));
-			$this->site_id = htmlspecialchars(strip_tags($this->site_id));
-			$this->sub_con_name = htmlspecialchars(strip_tags($this->sub_con_name));
-			$this->project_id = htmlspecialchars(strip_tags($this->project_id));
-			$this->task_id = htmlspecialchars(strip_tags($this->task_id));
-			$this->im_id = htmlspecialchars(strip_tags($this->im_id));
-			$this->date_of_intall =  $this->date_of_intall;
+			INSERT INTO ".$this->accountTable."(`payment_amount`, `notes`, `user_id`, `subcontractor_id`)
+			VALUES(?,?,?,?)");
+
+			$this->payment_amount = htmlspecialchars(strip_tags($this->payment_amount));	
+			$this->subcontractor_id = htmlspecialchars(strip_tags($this->subcontractor_id));
+			$this->user_id = htmlspecialchars(strip_tags($this->user_id));
 			$this->note = htmlspecialchars(strip_tags($this->note));
 
-			$stmt->bind_param("sssssssss",  $this->site_name,$this->site_id ,$this->sub_con_name,$this->note,$this->date_of_intall,$this->project_id,$this->task_id,$this->im_id,$this->created_user_id);
+			$stmt->bind_param("ssss",  	$this->payment_amount,$this->note ,$this->user_id,$this->subcontractor_id);
 		
 	
 			if($stmt->execute()){
-
-				$uquery = "SELECT u.id,u.first_name,u.last_name,uu.id as sub_id,u.email,uu.first_name as sub_first_name,uu.first_name as sub_last_name,
-				uu.email as sub_email 
-				from ". $this->userTable ." u
-				LEFT JOIN ". $this->userTable ." uu ON uu.id = ".$this->sub_con_name.
-				" Where  u.id = ". $this->im_id;
-
-				$stmt = $this->conn->prepare($uquery);
-				$stmt->execute();
-				$result = $stmt->get_result();	
-				$row = $result->fetch_row();
-				
-				$imName  = $row[1].' '.$row[2];
-				$email  = $row[4];
-				$subName =  $row[5].' '.$row[6];
-				
-				//echo $imName.' '.$email;
-
-				$this->sendMail('add',$imName,	$subName,$email);
-				return true;
-				
+				return true;				
 			}
 
-				
-				return true;
 			}		
 		}
 

@@ -9,12 +9,17 @@
 		<li id="transactions"><a href="transactions.php">Transactions</a></li> 
 	<?php } ?>
 
-	<?php if($_SESSION["role"] == 'Accountable' || $_SESSION["role"] == "SubContractor") { ?>
+	<?php if($_SESSION["role"] == "SubContractor") { ?>
 		
 		<li id="transactions"><a href="transactions.php">Transactions</a></li> 
+		
 	<?php } ?>
 	
-	
+	<?php if($_SESSION["role"] == 'Accountable' || $_SESSION["role"] == 'superAdmin') { ?>
+		<li id="payment_transactions"><a href="payment_transactions.php">Payment Transactions</a></li> 
+		
+		<li id="summary_report"><a href="summary_report.php">Summary Report</a></li> 
+	<?php } ?>
 
 
 </ul>

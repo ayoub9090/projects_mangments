@@ -1,14 +1,14 @@
 <?php
 include_once 'config/Database.php';
 include_once 'class/User.php';
-include_once 'class/Transaction.php';
+include_once 'class/SummaryReport.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $user = new User($db);
 
-$transaction = new Transaction($db);
+$transaction = new SummaryReport($db);
 
 
 if(!$user->loggedIn()) {
@@ -27,13 +27,13 @@ include('inc/header.php');
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
 
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
-<script src="js/transaction.js"></script>
+<script src="js/summary_report.js"></script>
 <script src="js/general.js"></script>
 <?php include('inc/container.php');?>
 <div class="container">
     <?php include('top_menus.php'); ?>
 
-    <?php if($_SESSION["role"] == 'Accountable'){ ?>
+  
     <form action="">
         <!-- <div class="form-group--select"> -->
         <div class="row ">
@@ -60,16 +60,7 @@ include('inc/header.php');
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <!-- <label for="daterange">By Date Range :</label> -->
-
-                        <div class="form-group">
-                            <label for="fromDate">From Date:</label>
-                            <input type="text" name="fromDate" class="form-control w-100 dateRange" value="" />
-                        </div>
-                        <div class="form-group">
-                            <label for="toDate">To Date:</label>
-                            <input type="text" name="toDate" class="form-control w-100 dateRange" value="" />
-                        </div>
+                     
                         
                     </div>
                     <div class="col-md-4">
@@ -90,7 +81,7 @@ include('inc/header.php');
         </div>
     </form>
 
-<?php } ?>
+
 
 <div> 	
     <div class="panel-heading">
@@ -99,9 +90,7 @@ include('inc/header.php');
                 <h3 class="panel-title"></h3>
             </div>
             <div class="col-md-2 text-right">
-                <?php if($_SESSION["role"] !== 'Accountable'){ ?>
-                <button type="button" id="addTransaction" class="btn btn-info add" title="Add transaction"><span class="glyphicon glyphicon-plus"></span></button>
-                <?php } ?>
+       
                 
             </div>
         </div>
@@ -112,20 +101,12 @@ include('inc/header.php');
 				<tr>
 					<th>#</th>
 
-					<th>Site Name</th>
-					<th>Site NO</th>
-					<th>Sub-Con Name</th>
-					<th>Date of Installation</th>
-					<th>Project Name</th>
-					<th>Task Description</th>
-					<th>IM Name</th>
-					<th>Notes</th>
-					<th>Status</th>
-					<th>Work Amount</th>
-					
+					<th>Subcontractor Name</th>
+					<th>Total Work Amount</th>		
+                    <th>Total Payment Amount</th>
+                    <th>Balance</th>
 					<th></th>
-					<th></th>
-					<th></th>
+				
 				</tr>
 			</thead>
 
@@ -133,22 +114,11 @@ include('inc/header.php');
 			<tfoot>
 				<tr>
 					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th  style="text-align:right">Total:</th>
+					<th  style="text-align:right"></th>
 					<th style="text-align:right">Total:</th>
 					<th></th>
 					<th></th>
-					<th></th>
-
-
+                    <th></th>
 				</tr>
 				<tr>
 					<th colspan="15" class="balance" style="text-align:right">Balance:</th>

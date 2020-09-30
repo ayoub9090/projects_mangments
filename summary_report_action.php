@@ -1,13 +1,13 @@
 <?php
 include_once 'config/Database.php';
-include_once 'class/Transaction.php';
+include_once 'class/SummaryReport.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$transaction = new Transaction($db);
+$transaction = new SummaryReport($db);
 
-if(!empty($_POST['action']) && $_POST['action'] == 'listTransaction') {
+if(!empty($_POST['action']) && $_POST['action'] == 'listContractors') {
 	$transaction->user_role = $_SESSION["role"];
 	$transaction->user_id = $_SESSION["userid"];
 	
@@ -15,11 +15,9 @@ if(!empty($_POST['action']) && $_POST['action'] == 'listTransaction') {
 	$transaction->filterDateFrom = $_POST["filterDateFrom"];
 	$transaction->filterDateTo = $_POST["filterDateTo"];
 
-	$transaction->listTransaction();
+	$transaction->listContractors();
 }
-
-
-if(!empty($_POST['action']) && $_POST['action'] == 'listTransactionSingle') {
+if(!empty($_POST['action']) && $_POST['action'] == 'listPayments') {
 	$transaction->user_role = $_SESSION["role"];
 	$transaction->user_id = $_SESSION["userid"];
 	
@@ -27,20 +25,17 @@ if(!empty($_POST['action']) && $_POST['action'] == 'listTransactionSingle') {
 	$transaction->filterDateFrom = $_POST["filterDateFrom"];
 	$transaction->filterDateTo = $_POST["filterDateTo"];
 
-	$transaction->listTransactionSingle();
+	$transaction->listPayments();
 }
- 
+
+
 if(!empty($_POST['action']) && $_POST['action'] == 'addTransaction') {	
 	
-	$transaction->site_name = $_POST["site_name"];
-	$transaction->site_id = $_POST["site_id"];
-	$transaction->sub_con_name = $_POST["sub_con_name"];
-	$transaction->project_id = $_POST["project_id"];
-	$transaction->task_id = $_POST["task_id"];
-	$transaction->im_id = $_POST["im_id"];
-	$transaction->date_of_intall = $_POST["date_of_intall"];
+	$transaction->payment_amount = $_POST["payment_amount"];
+	$transaction->subcontractor_id = $_POST["sub_con_name"];
+	
 	$transaction->note = $_POST["note"];
-	$transaction->created_user_id = $_SESSION["userid"];
+	$transaction->user_id = $_SESSION["userid"];
 	
 	$transaction->insert();
 }

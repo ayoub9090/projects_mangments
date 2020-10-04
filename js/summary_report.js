@@ -5,8 +5,11 @@ $(document).ready(function () {
 
 	var options = [{
 		"targets": [0, 5],
-		"orderable": false,
-	}];
+		"orderable": false
+	},
+
+
+	];
 
 
 	var mainSubContractor = "";
@@ -308,10 +311,6 @@ $(document).ready(function () {
 
 
 });
-
-
-
-
 
 
 

@@ -17,11 +17,12 @@ class SummaryReport {
 		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
 		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
 
-		$sqlQuery = "SELECT u.first_name, u.last_name,t.status, t.sub_con_name, 
-		COUNT(t.work_amount) as numberOfTransations,
+		$sqlQuery = "SELECT t.sub_con_name,CONCAT(u.first_name,' ', u.last_name) AS fullname,
 		SUM(t.work_amount) total_work_amount,
 		SUM(p.payment_amount) total_payment_amount, 
-        (SUM(t.work_amount) - SUM(p.payment_amount))  'balance'
+        (SUM(t.work_amount) - SUM(p.payment_amount))  'balance',
+		t.status,p.created_date,
+		COUNT(t.work_amount) as numberOfTransations 
 		From pm_transaction t 
         LEFT JOIN pm_users u on u.id = t.sub_con_name 
         LEFT JOIN pm_accounts p on p.subcontractor_id = t.sub_con_name 
@@ -38,7 +39,11 @@ class SummaryReport {
 			if($this->filterDateFrom){
 				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
-				//$sqlQuery .= ' AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				if($this->sub_con_id){
+					$sqlQuery .= ' AND (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				}else{
+					$sqlQuery .= ' WHERE (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				}
 			}
 
 		}
@@ -58,14 +63,14 @@ class SummaryReport {
 					$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 					$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
 					
-					//$sqlQuery .= 'AND (cast(trans.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+					$sqlQuery .= ' AND (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 				}
 		}
 		$sqlQuery .= " GROUP by t.sub_con_name ";
 		if(!empty($_POST["order"])){
-			$sqlQuery .= 'ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
+			$sqlQuery .= 'ORDER BY '.($_POST['order']['0']['column'] + 1).' '.$_POST['order']['0']['dir'].' ';
 		} else {
-			//$sqlQuery .= 'ORDER BY trans.date_created DESC ';
+			//$sqlQuery .= 'ORDER BY `total_work_amount` DESC ';
 		}
 
 
@@ -95,7 +100,7 @@ class SummaryReport {
 		while ($transaction = $result->fetch_assoc()) { 				
 			$rows = array();			
 			$rows[] = $transaction['sub_con_name'];
-			$rows[] = ucfirst($transaction['first_name']).' '.ucfirst($transaction['last_name']);
+			$rows[] = ucfirst($transaction['fullname']);
 			$rows[] = $transaction['total_work_amount'];
 			$rows[] = $transaction['total_payment_amount'];
 			$rows[] = $transaction['balance'];
@@ -137,7 +142,12 @@ class SummaryReport {
 			if($this->filterDateFrom){
 				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
+
+				if($this->sub_con_id){
 				$sqlQuery .= ' AND (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				}else{
+					$sqlQuery .= ' WHERE (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				}
 			}
 
 		}

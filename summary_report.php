@@ -60,7 +60,16 @@ include('inc/header.php');
                         </select>
                     </div>
                     <div class="col-md-4">
-                     
+                        <!-- <label for="daterange">By Date Range :</label> -->
+
+                        <div class="form-group">
+                            <label for="fromDate">From Date:</label>
+                            <input type="text" name="fromDate" class="form-control w-100 dateRange" value="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="toDate">To Date:</label>
+                            <input type="text" name="toDate" class="form-control w-100 dateRange" value="" />
+                        </div>
                         
                     </div>
                     <div class="col-md-4">

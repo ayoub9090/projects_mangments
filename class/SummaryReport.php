@@ -127,7 +127,7 @@ class SummaryReport {
 		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
 		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
 
-		$sqlQuery = "SELECT p.id,u.first_name,u.last_name,p.created_date,p.subcontractor_id,p.notes,p.payment_amount FROM pm_accounts p 
+		$sqlQuery = "SELECT p.id,CONCAT(u.first_name,' ', u.last_name) AS fullname,p.created_date,p.notes,p.payment_amount,p.subcontractor_id FROM pm_accounts p 
 		LEFT JOIN pm_users u ON u.id = p.subcontractor_id  
 		";
 
@@ -169,7 +169,7 @@ class SummaryReport {
 		}
 		
 		if(!empty($_POST["order"])){
-			$sqlQuery .= 'ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
+			$sqlQuery .= 'ORDER BY '.($_POST['order']['0']['column'] + 1).' '.$_POST['order']['0']['dir'].' ';
 		} else {
 			$sqlQuery .= 'ORDER BY p.created_date DESC ';
 		}
@@ -201,7 +201,7 @@ class SummaryReport {
 		while ($transaction = $result->fetch_assoc()) { 				
 			$rows = array();			
 			$rows[] = $transaction['id'];
-			$rows[] = ucfirst($transaction['first_name']).' '.ucfirst($transaction['last_name']);
+			$rows[] = ucfirst($transaction['fullname']);
 			
 		
 			$date = strtotime($transaction['created_date']); 

@@ -19,7 +19,7 @@ $(document).ready(function () {
 				"orderable": false,
 			},
 		],
-		"pageLength": 10
+		"pageLength": 20
 	});
 
 	$('#addProject').click(function () {

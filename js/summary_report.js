@@ -64,7 +64,7 @@ $(document).ready(function () {
 		"columnDefs":
 			options
 		,
-		"pageLength": 10,
+		"pageLength": 20,
 		"footerCallback": function (row, data, start, end, display) {
 			var api = this.api(), data;
 			console.log(data)

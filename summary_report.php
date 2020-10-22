@@ -114,6 +114,7 @@ include('inc/header.php');
 					<th>Total Work Amount</th>		
                     <th>Total Payment Amount</th>
                     <th>Balance</th>
+                    
 					<th></th>
 				
 				</tr>

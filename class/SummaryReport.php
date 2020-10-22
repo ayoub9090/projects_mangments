@@ -18,110 +18,178 @@ class SummaryReport {
 		$this->user_id =  htmlspecialchars(strip_tags($this->user_id));
 
 		$sqlQuery = "SELECT t.sub_con_name,CONCAT(u.first_name,' ', u.last_name) AS fullname,
-		SUM(t.work_amount) total_work_amount,
-		SUM(p.payment_amount) total_payment_amount, 
-        (SUM(t.work_amount) - SUM(p.payment_amount))  'balance',
-		t.status,p.created_date,
-		COUNT(t.work_amount) as numberOfTransations 
+		SUM(t.work_amount) total_work_amount,t.status,
+		COUNT(t.work_amount) as numberOfTransations,
+		t.id
 		From pm_transaction t 
-        LEFT JOIN pm_users u on u.id = t.sub_con_name 
-        LEFT JOIN pm_accounts p on p.subcontractor_id = t.sub_con_name 
+        LEFT JOIN pm_users u on u.id = t.sub_con_name
+        where status='approved'
 		";
 
 	
 
 		if(empty($_POST["search"]["value"])){
-			$sqlQuery .= ' where(t.status = "Approved") ';	
+			
 			if($this->sub_con_id){
 				$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
 				$sqlQuery .= ' AND (t.sub_con_name = '.$this->sub_con_id.') ';
 			}
+
+
 			if($this->filterDateFrom){
 				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
 				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
 				if($this->sub_con_id){
-					$sqlQuery .= ' AND (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+					$sqlQuery .= ' AND (cast(t.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 				}else{
-					$sqlQuery .= ' WHERE (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+					$sqlQuery .= ' AND (cast(t.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 				}
 			}
-
 		}
 
 		if(!empty($_POST["search"]["value"])){
-			$sqlQuery .= ' where(u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' AND (u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR u.last_name LIKE "%'.$_POST["search"]["value"].'%" )';
 		
-				$sqlQuery .= ' AND (t.status = "Approved") ';	
+				
 
-				if($this->sub_con_id && $this->sub_con_id > 0){
-					$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
-					$sqlQuery .= ' AND (t.sub_con_name = '.$this->sub_con_id.') ';
-				}
+			if($this->sub_con_id){
+				$this->sub_con_id = htmlspecialchars(strip_tags($this->sub_con_id));	
+				$sqlQuery .= ' AND (t.sub_con_name = '.$this->sub_con_id.') ';
+			}
 
-				if($this->filterDateFrom){
-					$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
-					$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
-					
-					$sqlQuery .= ' AND (cast(p.created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+
+			if($this->filterDateFrom){
+				$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
+				$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
+				if($this->sub_con_id){
+					$sqlQuery .= ' AND (cast(t.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+				}else{
+					$sqlQuery .= ' AND (cast(t.date_created as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
 				}
+			}
 		}
-		$sqlQuery .= " GROUP by t.sub_con_name ";
+
+		$sqlQuery .= " GROUP by t.sub_con_name";
+		
+		
 		if(!empty($_POST["order"])){
-			$sqlQuery .= 'ORDER BY '.($_POST['order']['0']['column'] + 1).' '.$_POST['order']['0']['dir'].' ';
-		} else {
-			//$sqlQuery .= 'ORDER BY `total_work_amount` DESC ';
+			if($_POST['order']['0']['column'] == "1" || $_POST['order']['0']['column'] == "2"){
+				$sqlQuery .= ' ORDER BY '.($_POST['order']['0']['column'] + 1).' '.$_POST['order']['0']['dir'].' ';
+			}
 		}
 
 
-	
-		$sqlQueryTotal = $sqlQuery;
-		
-		if($_POST["length"] != -1){
-			$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
-		}
-		
 		$stmt = $this->conn->prepare($sqlQuery);
 		$stmt->execute();
 		$result = $stmt->get_result();	
 		
-		//$stmtTotal = $this->conn->prepare("SELECT * FROM ".$this->transactionTable);
-		$stmtTotal = $this->conn->prepare($sqlQueryTotal);
-		
-
-		$stmtTotal->execute();
-		$allResult = $stmtTotal->get_result();
-		$allRecords = $allResult->num_rows;
-		
-		$displayRecords = $result->num_rows;
+	
 		$records = array();		
 
-		
+		$count = 1;
 		while ($transaction = $result->fetch_assoc()) { 				
-			$rows = array();			
-			$rows[] = $transaction['sub_con_name'];
+			$rows = array();
+			$rows[] = $count;
 			$rows[] = ucfirst($transaction['fullname']);
 			$rows[] = $transaction['total_work_amount'];
-			$rows[] = $transaction['total_payment_amount'];
-			$rows[] = $transaction['balance'];
-			
-			
-			$rows[] = '<a  href="payment_transactions.php?sub_con='.$transaction["sub_con_name"].'" id="'.$transaction["sub_con_name"].'" class="btn btn-info btn-xs "><span class="glyphicon glyphicon-eye-open" title="View"></span></a>';			
+			$work_amoount = $transaction['total_work_amount'];
 
-			$records[] = $rows;
-		}
+			$subConID = $transaction['sub_con_name'];
+			$sqlQuery1 = "SELECT 	
+				SUM(payment_amount) total_payment_amount,
+				COUNT(payment_amount) as numberOfTransations
+				From pm_accounts 
+				where subcontractor_id='".$subConID."'
+				
+			";
+
+			if(empty($_POST["search"]["value"])){
+						
+				if($this->filterDateFrom){
+					$this->filterDateFrom = htmlspecialchars(strip_tags($this->filterDateFrom));
+					$this->filterDateTo = htmlspecialchars(strip_tags($this->filterDateTo));	
+					if($this->sub_con_id){
+						$sqlQuery1 .= ' AND (cast(created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+					}else{
+						$sqlQuery1 .= ' AND (cast(created_date as date)  between "'.$this->filterDateFrom.'" and "'.$this->filterDateTo.'") ';
+					}
+				}
+
+			}
+			$stmt1 = $this->conn->prepare($sqlQuery1);
+			$stmt1->execute();
+			$result1 = $stmt1->get_result();
 		
+			while ($transaction = $result1->fetch_assoc()) { 				
+				
+				if($transaction['total_payment_amount'] == ""){
+					$rows[] = 0;
+				}else{
+					$rows[] = $transaction['total_payment_amount'];
+				}
+				
+				$rows[] = $work_amoount - $transaction['total_payment_amount'];
+				$rows[] = '<a  href="payment_transactions.php?sub_con='.$subConID.'" id="'.$subConID.'" class="btn btn-info btn-xs "><span class="glyphicon glyphicon-eye-open" title="View"></span></a>';			
+				
+
+				$records[] = $rows;
+				$count++;
+			}	
+					
+		}
+	
+		if(!empty($_POST["order"])){
+			if($_POST['order']['0']['column'] == "3" || $_POST['order']['0']['column'] == "4"){
+				//$sqlQuery .= ' ORDER BY '.($_POST['order']['0']['column'] + 1).' '.$_POST['order']['0']['dir'].' ';
+				$records = $this->sort_arr_of_obj($records,$_POST['order']['0']['column'],$_POST['order']['0']['dir']);
+			}
+
+			
+
+		}
+
+
+		$allRecords = count($records);
+
+		if($_POST["length"] != -1){
+			
+			$displayRecords = array_slice($records, $_POST['start'], $_POST['length']);
+		}
+	
+	
 		$output = array(
 			"draw"	=>	intval($_POST["draw"]),			
 			"iTotalRecords"	=> 	$displayRecords,
 			"iTotalDisplayRecords"	=>  $allRecords,
-			"data"	=> 	$records
+			"data"	=> 	$displayRecords
 		);
 		
 		echo json_encode($output);
 	}
 	
+	function sort_arr_of_obj($array, $sortby, $direction='asc') {
 
+		$sortedArr = array();
+		$tmp_Array = array();
+	
+		foreach($array as $k => $v) {
+			$tmp_Array[] = strtolower($v[$sortby]);
+		}
+	
+		if($direction=='asc'){
+			asort($tmp_Array);
+		}else{
+			arsort($tmp_Array);
+		}
+	
+		foreach($tmp_Array as $k=>$tmp){
+			$sortedArr[] = $array[$k];
+		}
+	
+		return $sortedArr;
+	
+	}
 	
 	public function listPayments(){
 		$this->user_role =  htmlspecialchars(strip_tags($this->user_role));
@@ -209,8 +277,9 @@ class SummaryReport {
 			$rows[] = date('d-m-yy', $date);
 			$rows[] = $transaction['notes'];
 			$rows[] = $transaction['payment_amount'];
-			
-				
+			if($_SESSION["role"] == "superAdmin"){
+				$rows[] = '<button type="button" name="delete" id="'.$transaction["id"].'" class="btn btn-danger btn-xs delete" ><span class="glyphicon glyphicon-remove" title="Delete"></span></button>';
+			}
 
 			$records[] = $rows;
 		}
@@ -312,7 +381,7 @@ class SummaryReport {
 		if($this->id) {			
 
 			$stmt = $this->conn->prepare("
-				DELETE FROM ".$this->transactionTable." 
+				DELETE FROM ".$this->accountTable." 
 				WHERE id = ?");
 
 			$this->id = htmlspecialchars(strip_tags($this->id));

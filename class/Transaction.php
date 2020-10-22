@@ -31,7 +31,8 @@ class Transaction {
 
 
 		if($this->user_role == "SubContractor" && empty($_POST["search"]["value"])){
-			$sqlQuery .= 'where(trans.created_by_id = "'. $this->user_id .'") ';	
+			//$sqlQuery .= 'where(trans.created_by_id = "'. $this->user_id .'") ';	
+			$sqlQuery .= 'where(trans.sub_con_name = "'. $this->user_id .'") ';	
 		}
 
 		if($this->user_role == "Admin" && empty($_POST["search"]["value"])){
@@ -59,11 +60,14 @@ class Transaction {
 			$sqlQuery .= ' OR p.project_name LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR t.task_description LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR u.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR sc.first_name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR sc.last_name LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR trans.status LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR trans.work_amount LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR trans.date_of_installation LIKE "%'.$_POST["search"]["value"].'%") ';
 			if($this->user_role == "SubContractor"){
-				$sqlQuery .= 'AND (trans.created_by_id = "'. $this->user_id .'") ';	
+				//$sqlQuery .= 'AND (trans.created_by_id = "'. $this->user_id .'") ';	
+				$sqlQuery .= 'AND (trans.sub_con_name = "'. $this->user_id .'") ';	
 			}
 			if($this->user_role == "Admin"){
 				$sqlQuery .= 'AND (trans.im_id = "'. $this->user_id .'") ';	

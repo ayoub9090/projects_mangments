@@ -200,11 +200,12 @@ $(document).ready(function () {
 	});
 
 	$("#transactionListing").on('click', '.delete', function () {
+
 		var id = $(this).attr("id");
 		var action = "deleteTransaction";
 		if (confirm("Are you sure you want to delete this transaction?")) {
 			$.ajax({
-				url: "transaction_action.php",
+				url: "summary_report_action.php",
 				method: "POST",
 				data: { id: id, action: action },
 				success: function (data) {

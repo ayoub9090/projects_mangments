@@ -117,7 +117,9 @@ include('inc/header.php');
                     <th>Note</th>
                     <th>Payment Amount</th>
 			
-				
+                    <?php if($_SESSION["role"] == "superAdmin"){ ?>
+					<th></th>
+                    <?php } ?>
 				</tr>
 			</thead>
 
